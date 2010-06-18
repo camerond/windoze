@@ -19,15 +19,15 @@
       function makeButtons(names) {
         $.each(names, function(k, v) {
           var safeName = v.replace(/\s/ig, "-").toLowerCase();
-          var closeId = "wz-" + safeName + "-btn";
-          windoze.createAndAppend("a", closeId, $p).attr('href', '#').addClass('btn').text(v);
+          var closeId = "wz-" + safeName + "-button";
+          windoze.createAndAppend("a", closeId, $p).attr('href', '#').addClass('wz-button').text(v);
         });
       }
 
       function relocatePopup($target) {
         var coords = $target.offset();
         $p.css('left', coords['left'] - (($p.outerWidth() - $target.outerWidth()) / 2));
-        $p.css('top', coords['top'] - $p.height());
+        $p.css('top', coords['top'] - $p.outerHeight());
         $p.fadeIn(150, function() { windoze.outsideClickHandler($p) });
       }
 
@@ -81,7 +81,7 @@
     outsideClickHandler : function($p) {
 
       var prefix = 'wz-';
-      $("body").bind("click", function(e) {
+      $(document).bind("click", function(e) {
         t = $(e.target);
         if((t.attr('id').substring(0, 3) === prefix) || (t.parents().filter(prefix).length)) {
           return;

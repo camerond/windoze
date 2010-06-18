@@ -1,32 +1,84 @@
 @import 'mixins'
 
+
+
+body
+  background: #333
+  font-family: "Helvetica Neue", Helvetica, Arial
+
+#demo
+  background: #fff
+  width: 500px
+  padding: 20px 50px
+  margin: 150px auto
+  +border-radius(20px)
+  background: #fff
+  +box-shadow(0 0 20px #000)
+  color: #333
+  
+  h1
+    color: #000
+  
+  h2
+    color: #666
+  
+  a
+    color: #ff0000
+    text-decoration: none
+    
+    &:hover
+      text-decoration: underline
+
+#demo-modal
+  background: #000
+  border: 10px solid #fff
+  color: #fff
+  padding: 20px 50px
+  
+  a
+    color: #fff
+    text-decoration: none
+    
+    &:hover
+      text-decoration: underline
+  
+
 #wz-popup
+  font-family: "Helvetica Neue", Helvetica, Arial
+  font-size: 12px
+  font-weight: bold
   display: none
   position: absolute
   width: 110px
-  background: #26343f
-  border: 4px solid #fff
-  @include border-radius(4px)
-  @include box-shadow(0 0 2px #000)
+  background: #eee
+  border: 1px solid #bbb
+  border-top: 1px solid #ccc
+  padding: 10px 10px 5px 10px
+  +border-radius(3px)
+  +box-shadow(0 2px 20px #bbb)
+  z-index: 9969
   
-  .btn
-    float: none
-    margin: 5px
-    +gradient-bg(#e5e6e7, #b5bcc2)
-    border: 1px solid #dbdfe3
-    font-size: 13px
-    color: #26343f
+  .wz-button
+    display: block
+    text-align: center
+    margin-bottom: 5px
+    padding: 4px 0 5px 0
+    +gradient-bg(#eaeaea, #bababa)
+    border: 1px solid #bbb
+    border-bottom: 1px solid #999
+    color: #333
+    text-decoration: none
+    +border-radius(3px)
 
     &:hover
-      +gradient-bg(#e7e8ea, #c7d0d9)
+      +gradient-bg(#fff, #ccc)
 
     &:active
-      padding: 5px 12px 4px 12px
-      +gradient-bg(#e5e6e7, #b5bcc2)
+      padding: 5px 0 4px 0
       
 #wz-modal
   position: relative
-  z-index: 9999
+  z-index: 9969
 
   #wz-flood
     position: fixed
@@ -34,85 +86,85 @@
     top: 0
     width: 100%
     height: 100%
-    background: #26343f
+    background: #333
     @include opacity(0.9)
 
   #wz-window
     position: fixed
     top: 100px
     left: 50%
-    margin-left: -270px
-    width: 540px
+    margin-left: -300px
+    width: 600px
 
-.modal-choose
-  color: #fff
-  font-weight: bold
-
-  h2
-    font-size: 28px
-    text-align: center
-    margin: 0 0 10px 0
-
-  .window
-    position: relative
-    margin: 0 auto
-    padding: 20px
-    background: #26343f
-    border: 4px solid #fff
-    +border-radius(4px)
-
-    a#wz-close
-      position: absolute
-      display: block
-      left: -18px
-      top: -18px
-      border: 3px solid #fff
-      background: #26343f url(/images/btn_close.png) no-repeat center
-      height: 27px
-      width: 27px
-      cursor: pointer
-      +border-radius(20px)
-
-      &:hover
-        background-color: #2c87c1
-
-    h3
-      border-bottom: 1px solid #3c4953
-      padding: 0 0 5px 10px
-      margin: 0 0 10px 0
-      font-size: 24px
-
-    .assigned
-      overflow: hidden
-      margin-bottom: 20px
-
-      ul.column
-        width: 50%
-
-    .available
-      overflow: hidden
-
-      ul.column
-        width: 30%
-
-    ul.column
-      float: left
-
-      li
-        margin: 0
-        padding: 0 10px
-
-        a
-          color: #fff
-          font-size: 14px
-          text-decoration: none
-          display: block
-
-          &:hover
-            color: #c5ea1a
-
-          small
-            font-size: 85%
-            font-weight: normal
-            +opacity(.6)
-
+// .modal-choose
+//   color: #fff
+//   font-weight: bold
+// 
+//   h2
+//     font-size: 28px
+//     text-align: center
+//     margin: 0 0 10px 0
+// 
+//   .window
+//     position: relative
+//     margin: 0 auto
+//     padding: 20px
+//     background: #26343f
+//     border: 4px solid #fff
+//     +border-radius(4px)
+// 
+//     a#wz-close
+//       position: absolute
+//       display: block
+//       left: -18px
+//       top: -18px
+//       border: 3px solid #fff
+//       background: #26343f url(/images/btn_close.png) no-repeat center
+//       height: 27px
+//       width: 27px
+//       cursor: pointer
+//       +border-radius(20px)
+// 
+//       &:hover
+//         background-color: #2c87c1
+// 
+//     h3
+//       border-bottom: 1px solid #3c4953
+//       padding: 0 0 5px 10px
+//       margin: 0 0 10px 0
+//       font-size: 24px
+// 
+//     .assigned
+//       overflow: hidden
+//       margin-bottom: 20px
+// 
+//       ul.column
+//         width: 50%
+// 
+//     .available
+//       overflow: hidden
+// 
+//       ul.column
+//         width: 30%
+// 
+//     ul.column
+//       float: left
+// 
+//       li
+//         margin: 0
+//         padding: 0 10px
+// 
+//         a
+//           color: #fff
+//           font-size: 14px
+//           text-decoration: none
+//           display: block
+// 
+//           &:hover
+//             color: #c5ea1a
+// 
+//           small
+//             font-size: 85%
+//             font-weight: normal
+//             +opacity(.6)
+// 
