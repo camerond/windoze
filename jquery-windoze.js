@@ -24,11 +24,10 @@
 
         makeButtons(names);
         relocatePopup($target);
-        associatePopup($target)
         
         $(window).bind('resize', function() {
           relocatePopup($target);
-        });;
+        });
 
         wz.setData($p, $target);
 
@@ -45,10 +44,6 @@
           $p.css('left', coords['left'] - (($p.outerWidth() - $target.outerWidth()) / 2));
           $p.css('top', coords['top'] - $p.outerHeight());
           $p.fadeIn(opts.speed, function() { wz.outsideClickHandler($p) });
-        }
-
-        function associatePopup($target) {
-          $p.data('target-id', $target.attr('id'));
         }
       });
     },

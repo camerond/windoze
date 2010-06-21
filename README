@@ -8,5 +8,4 @@ TODO:
   - demo buttons on popup/modal close them
   - split css styles between 'skinning' and positioning?
   - smart popup - popup idea: [block [link][link]] removes links and turns them into popup actions!
-wz_modal_load?
   - write this readme
