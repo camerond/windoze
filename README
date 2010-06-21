@@ -3,22 +3,10 @@ Windoze
 A markup-minimal context menu / modal plugin for jQuery.
 
 TODO:
-  - write this readme
-  - rewrite styles
-  - add options object
-    - rework how popup method receives parameters
-  - wz methods return created object or this?
-  - allow spaces in popup buttons
-  - make clear() method public
-  - options:
-    - animation speed
-    - class/id prefix
-    - popup appears top vs bottom
-    - modal width
   - test in IE7
   - test in IE6? hm
   - demo buttons on popup/modal close them
-  - split styles between formatting and positioning?
-  - popup relocates relative to target when window is resized
-  
-popup idea: [block [link][link]] removes links and turns them into popup actions!
+  - split css styles between 'skinning' and positioning?
+  - smart popup - popup idea: [block [link][link]] removes links and turns them into popup actions!
+wz_modal_load?
+  - write this readme
