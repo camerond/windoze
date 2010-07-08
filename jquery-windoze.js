@@ -12,7 +12,8 @@
     wz_popup : function(names, options) {
       return this.live("click", function() {
         
-        var opts = $.extend(popup_settings, options);
+        var temp_settings = $.extend({}, popup_settings);
+        var opts = $.extend(temp_settings, options);
         wz_public.wz_clear();
 
         var $target = $(this);
@@ -47,7 +48,8 @@
       return this.live("click", function(e) {
         e.preventDefault();
 
-        var opts = $.extend(modal_settings, options);
+        var temp_settings = $.extend({}, modal_settings);
+        var opts = $.extend(temp_settings, options);
         wz_public.wz_clear();
 
         if(!opts.url) {
@@ -58,7 +60,7 @@
           }
         }
 
-        var $modal = wz.createAndAppend("div", "wz-modal", $("body"));
+        var $modal = wz.createAndAppend("div", "wz-modal", $("body")).hide().fadeIn(opts.speed);
         var $flood = wz.createAndAppend("div", "wz-flood", $("#wz-modal"));
         var $content = wz.createAndAppend("div", "wz-window", $("#wz-modal")).load(opts.url);
 
