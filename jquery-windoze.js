@@ -2,14 +2,10 @@
 
   var modal_settings = {
     speed: 150
-    //width
-    //prefix
   }
 
   var popup_settings = {
     speed: 150
-    //position: "top"
-    //prefix
   }
 
   var wz_public = {
@@ -47,14 +43,24 @@
         }
       });
     },
-    wz_modal : function(url, options) {
-      return this.live("click", function() {
+    wz_modal : function(options) {
+      return this.live("click", function(e) {
+        e.preventDefault();
+
         var opts = $.extend(modal_settings, options);
         wz_public.wz_clear();
 
+        if(!opts.url) {
+          if($(this).attr('href') && ($(this).attr('href') != '#')) {
+            opts.url = $(this).attr('href');
+          } else {
+            return false;
+          }
+        }
+
         var $modal = wz.createAndAppend("div", "wz-modal", $("body"));
         var $flood = wz.createAndAppend("div", "wz-flood", $("#wz-modal"));
-        var $content = wz.createAndAppend("div", "wz-window", $("#wz-modal")).load(url);
+        var $content = wz.createAndAppend("div", "wz-window", $("#wz-modal")).load(opts.url);
 
         $("#wz-close, #wz-flood").live("click", close);
         captureEscape(close);
@@ -68,7 +74,6 @@
         function captureEscape(callback) {
           $(document).bind("keyup", function(e) {
             if (e.keyCode === 27 && $modal.is(":visible")) {
-              //callback();
               $(document).unbind(e);
             }
           });
@@ -119,5 +124,7 @@
   $.each(wz_public, function(i) {
     $.fn[i] = this;
   });
+  
+  $('.wz-modal').wz_modal();
 
 })(jQuery);

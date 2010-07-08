@@ -8,14 +8,14 @@ Windoze is primarily for situations where a modal will perform an action that af
 
 The Windoze modal markup is always appended to the end of the `body`, with `.data('wz_target')` providing a reference back to the element.
 
-The `.wz_modal` function creates:
+You can either manually call `wz_modal` on an element, OR any anchor with the class of `wz_modal` will use that element's `href` as the loading url (see the demo). The `.wz_modal` function creates:
 
 - `#wz_modal`
   - `#wz_flood` to dim the background
   - `#wz_window` which holds your loaded content
 
-Any link with the id of `#wz_close` will close the modal. (So will `$.wz_clear()`)
-  
+Any link with the id of `#wz_close` will close the modal. (So will `$.fn.wz_clear()`)
+
 The `.wz_popup` function creates:
 
 - `#wz_popup` positioned over the clicked element
@@ -29,6 +29,5 @@ And then you can write handlers, etc. to your heart's content. See the demo to a
 
   - split positioning styles out from the demo styles so people don't go insane
   - settings for positioning wz_popup
-  - href on .wz_modal class also works for calling modal
   - semantic action list for wz_popup
   - write this readme
