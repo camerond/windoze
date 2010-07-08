@@ -25,12 +25,12 @@
 
 =box-shadow($x)
   -webkit-box-shadow: $x
-  moz-box-shadow: $x
+  -moz-box-shadow: $x
   box-shadow: $x
 
 =opacity($o)
-  -moz-opacity: $o
   opacity: $o
+  filter: alpha(opacity=$o*100)
 
 =columns($n, $gap)
   -moz-column-count: $n
