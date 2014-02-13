@@ -1,4 +1,4 @@
-# jQuery Windoze Plugin
+# jQuery windoze Plugin
 # http://github.com/camerond/windoze
 # version 0.0.1
 #
@@ -25,28 +25,44 @@
 
 (($) ->
 
-  Windoze =
+  windoze =
     name: 'windoze'
+    container: '#modal'
+    createModalOverlay: ->
+      @$overlay = $('#modal_layer')
+      if !@$overlay.length
+        @$overlay = $('<div />').attr('id', 'modal_layer').appendTo($(document.body))
+    createModalWindow: ->
+      @$modal = $(@container)
+      if !@$modal.length
+        id = @container.match(/#([a-z0-9\-_]+)/gi)
+        klass = @container.match(/\.([a-z0-9\-_]+)/gi)
+        @$modal = $('<div />')
+          .attr('id', if id then id.join().replace('#', ''))
+          .addClass(if klass then klass.join(' ').replace(/\./g, ''))
+          .appendTo($(document.body))
     init: ->
+      @createModalOverlay()
+      @createModalWindow()
       @$el
 
-  $.fn[Windoze.name] = (opts) ->
+  $.fn[windoze.name] = (opts) ->
     $els = @
     method = if $.isPlainObject(opts) or !opts then '' else opts
-    if method and Windoze[method]
-      Windoze[method].apply($els, Array.prototype.slice.call(arguments, 1))
+    if method and windoze[method]
+      windoze[method].apply($els, Array.prototype.slice.call(arguments, 1))
     else if !method
       $els.each ->
         plugin_instance = $.extend(
           true,
           $el: $(@),
-          Windoze,
+          windoze,
           opts
         )
-        $(@).data(Windoze.name, plugin_instance)
+        $(@).data(windoze.name, plugin_instance)
         plugin_instance.init()
     else
-      $.error('Method #{method} does not exist on jQuery. #{Windoze.name}');
+      $.error('Method #{method} does not exist on jQuery. #{windoze.name}');
     return $els;
 
 )(jQuery)
