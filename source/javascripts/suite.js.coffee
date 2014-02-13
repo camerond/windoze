@@ -15,6 +15,11 @@
   tester =
     data: ->
       @$trigger.data('windoze')
+    createElements: (text) ->
+      text ||= 'some text'
+      $(document.body)
+        .append($('<div />').attr('id', 'modal').text(text))
+        .append($('<div />').attr('id', 'modal_layer'))
     init: (opts)->
       @$fixture = $(@fixture || '.link_trigger')
       @$trigger = @$fixture.find('a').eq(0)
@@ -26,14 +31,12 @@
     $trigger = tester.init()
     deepEqual $trigger.hide().show(), $trigger, 'returns trigger properly'
 
-  test 'it uses #modal and #modal_layer if none are specified', ->
-    $(document.body)
-      .append($('<div />').attr('id', 'modal'))
-      .append($('<div />').attr('id', 'modal_layer'))
+  test 'it uses #modal and #modal_layer if present', ->
     $trigger = tester.init()
     tester.data().$modal.shouldEqual($('#modal'))
 
-  test 'it creates a default #modal and #modal_layer if none are specified or present', ->
+  test 'it creates a default #modal and #modal_layer if not present', ->
+    $('#modal, #modal_layer').remove()
     $trigger = tester.init()
     tester.data().$modal.shouldEqual($('#modal'))
     tester.data().$overlay.shouldEqual($('#modal_layer'))
