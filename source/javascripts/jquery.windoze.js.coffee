@@ -28,6 +28,7 @@
   windoze =
     name: 'windoze'
     container: '#modal'
+    delegate: false
     createModalOverlay: ->
       @$overlay = $('#modal_layer')
       if !@$overlay.length
@@ -41,9 +42,38 @@
           .attr('id', if id then id.join().replace('#', ''))
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
+    show: ->
+      @$modal.show()
+      @$overlay.show()
+      @bindModalEvents()
+      @$modal.find(':input').eq(0).focus()
+    hide: (e) ->
+      if @$modal.find(':focus').length then return
+      @$modal.hide()
+      @$overlay.hide()
+      @unbindModalEvents()
+    open: ->
+      $(@).data('windoze').show()
+    close: ->
+      $(@).data('windoze').hide()
+    keydownHandler: (e) ->
+      if e.which == 27
+        @hide()
+    bindModalEvents: ->
+      @$overlay.on('click.wdz', $.proxy(@hide, @))
+      @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hide, @))
+      $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(@keydownHandler, @))
+    unbindModalEvents: ->
+      @$overlay.off('click.wdz')
+      @$modal.off('click.wdz')
+      $(document).off('keydown.wdz')
+    bindTriggerEvents: ->
+      @$el.on('click.wdz', @delegate, $.proxy(@show, @))
     init: ->
       @createModalOverlay()
       @createModalWindow()
+      @bindTriggerEvents()
+      @hide()
       @$el
 
   $.fn[windoze.name] = (opts) ->

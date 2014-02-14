@@ -1,5 +1,11 @@
 (($) ->
 
+  # fix for finding focused elements in an inactive window
+  jQuery.expr[":"].absfocus = jQuery.expr.createPseudo ->
+    return (elem) ->
+      doc = elem.ownerDocument;
+      elem == doc.activeElement && !!(elem.type || elem.href);
+
   $.fn.selectorText = () ->
     selector = "%#{@[0].tagName.toLowerCase()}"
     @attr('id') && selector += "##{@.attr('id')}"
@@ -14,7 +20,7 @@
       state = $(@).is(attr)
       ok state, msg or "#{$(@).selectorText()} should be #{attr}"
       state
-    state
+    @
 
   $.fn.shouldNotBe = (attr, msg) ->
     state = true
@@ -22,30 +28,46 @@
       state = !$(@).is(attr)
       ok state, msg or "#{$(@).selectorText()} should not be #{attr}"
       state
-    state
+    @
 
   $.fn.shouldSay = (text, msg) ->
     equal @text(), text, msg or "#{text} is displayed within #{@selectorText()}"
     @
 
   $.fn.shouldEqual = ($el) ->
-    ok $(this).length == 1 && $el.length == 1, 'checking for element duplication'
-    equal $(this)[0], $el[0], "#{$(this).selectorText()} is equal to #{$el.selectorText()}"
+    ok $(@).length == 1 && $el.length == 1, 'checking for element duplication'
+    equal $(@)[0], $el[0], "#{$(@).selectorText()} is equal to #{$el.selectorText()}"
     @
+
+  $.fn.pressKey = (k, msg) ->
+    if (msg)
+      ok(true, "I press " + msg);
+    $e = $.Event('keydown')
+    $e.keyCode = $e.which = k
+    $(@).trigger($e)
 
   tester =
     data: ->
       @$trigger.data('windoze')
+    verifyHidden: ->
+      @data().$modal.shouldBe(':hidden')
+      @data().$overlay.shouldBe(':hidden')
+    verifyVisible: ->
+      tester.data().$modal.shouldBe(':visible')
+      tester.data().$overlay.shouldBe(':visible')
     createElements: (text) ->
       text ||= 'some text'
       $(document.body)
         .append($('<div />').attr('id', 'modal').text(text))
         .append($('<div />').attr('id', 'modal_layer'))
     reset: ->
-      $('body > div').not('#qunit-fixture').remove()
-    init: (opts)->
-      @$fixture = $(@fixture || '.link_trigger')
-      @$trigger = @$fixture.find('a').eq(0)
+      $('body > *').not("[id^='qunit-']").remove()
+    use: (selector) ->
+      @$fixture = $(selector)
+      @$fixture.siblings().remove()
+    init: (opts, $el)->
+      if !@$fixture then @use('.link_trigger')
+      @$trigger = $el || @$fixture.find('a').eq(0)
       $(@$trigger).windoze(opts)
 
   QUnit.testDone -> tester.reset()
@@ -87,5 +109,93 @@
     tester.data().$modal
       .shouldEqual($('#other_modal.some_class'))
       .shouldSay('')
+
+  module 'Triggering'
+
+  test 'clicking an anchor with an href of `#` opens non-ajax modal', ->
+    tester.createElements()
+    $trigger = tester.init()
+    tester.verifyHidden()
+    $trigger.click()
+    tester.verifyVisible()
+    tester.data().$modal
+      .shouldEqual($('#modal'))
+      .shouldSay('some text')
+
+  test 'passing `open` should open modal', ->
+    $trigger = tester.init()
+    $trigger.windoze('open')
+    tester.verifyVisible()
+
+  test 'clicking on the overlay closes the modal', ->
+    $trigger = tester.init()
+    $trigger.click()
+    tester.verifyVisible()
+    tester.data().$overlay.click()
+    tester.verifyHidden()
+
+  test 'clicking on any anchor inside modal with [data-wdz-close] closes the modal', ->
+    tester.createElements()
+    $('#modal').append("<a href='#' data-wdz-close>close</a>")
+    $('body').append("<a href='#' data-wdz-close>close</a>")
+    $trigger = tester.init()
+    $trigger.click()
+    tester.verifyVisible()
+    $('body > a').click()
+    tester.verifyVisible()
+    $('#modal a').click()
+    tester.verifyHidden()
+
+  test 'typing `esc` should close modal', ->
+    $trigger = tester.init()
+    $trigger.click()
+    $(document).pressKey(27, 'escape')
+    tester.verifyHidden()
+
+  test 'passing `close` should close modal', ->
+    $trigger = tester.init()
+    $trigger.click()
+    $trigger.windoze('close')
+    tester.verifyHidden()
+
+  test 'calling windoze() with a selector delegates to children', ->
+    tester.use('.delegated_trigger')
+    $trigger = tester.init({
+      delegate: 'a.trigger'
+    }, $('.delegated_trigger'))
+    $trigger.click()
+    $trigger.find('a.one').click()
+    tester.verifyHidden()
+    $trigger.find('a.two.trigger').click()
+    tester.verifyVisible()
+    $trigger.windoze('close')
+    tester.verifyHidden()
+    $trigger.append($("<a href='#' class='three trigger'></a>"))
+    $trigger.find('a.three.trigger').click()
+    tester.verifyVisible()
+
+  module 'Form Elements',
+    setup: ->
+      tester.createElements()
+      $('#modal').append($('<input />').attr('type', 'text'))
+
+  test 'the first input/textarea should be focused when modal is shown', ->
+    $trigger = tester.init()
+    $trigger.click()
+    tester.data().$modal.find('input').shouldBe(':absfocus')
+    tester.data().$overlay.click()
+    tester.data().$modal.prepend($('<textarea />'))
+    $trigger.click()
+    tester.data().$modal.find('textarea').shouldBe(':absfocus')
+    tester.data().$modal.text('foobar')
+
+  test 'typing `esc` when input is focused should not close modal', ->
+    $trigger = tester.init()
+    $trigger.click()
+    $(document).pressKey(27, 'escape')
+    tester.verifyVisible()
+    tester.data().$modal.find('input').trigger('blur')
+    $(document).pressKey(27, 'escape')
+    tester.verifyHidden()
 
 )(jQuery)
