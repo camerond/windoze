@@ -32,6 +32,8 @@
     duration:
       modal: 300
       overlay: 150
+    fireCallback: (name) ->
+      @[name] && @[name]()
     createModalOverlay: ->
       @$overlay = $('#modal_layer')
       if !@$overlay.length
@@ -47,6 +49,7 @@
           .appendTo($(document.body))
     show: (e) ->
       e && e.preventDefault()
+      @fireCallback('beforeShow')
       @$modal.show()
       @$overlay.show()
       if @duration.modal then setTimeout $.proxy(@showModal, @), @duration.modal else @showModal()
@@ -55,20 +58,21 @@
       @$modal.find(':input').eq(0).focus()
     hide: (e) ->
       e && e.preventDefault()
-      m = @$modal
-      o = @$overlay
-      if m.find(':focus').length then return
-      m.removeClass('wdz-active')
-      o.removeClass('wdz-active')
+      if @$modal.find(':focus').length then return
+      @$modal.removeClass('wdz-active')
+      @$overlay.removeClass('wdz-active')
       if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
       if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
+      @fireCallback('beforeClose')
       @unbindModalEvents()
     showModal: ->
       @$modal.addClass('wdz-active')
+      @fireCallback('afterShow')
     showOverlay: ->
       @$overlay.addClass('wdz-active')
     hideModal: ->
       @$modal.hide()
+      @fireCallback('afterClose')
     hideOverlay: ->
       @$overlay.hide()
     open: ->
