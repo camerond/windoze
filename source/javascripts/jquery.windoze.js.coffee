@@ -46,14 +46,15 @@
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
     show: (e) ->
+      e && e.preventDefault()
       @$modal.show()
       @$overlay.show()
       if @duration.modal then setTimeout $.proxy(@showModal, @), @duration.modal else @showModal()
       if @duration.overlay then setTimeout $.proxy(@showOverlay, @), @duration.overlay else @showOverlay()
       @bindModalEvents()
       @$modal.find(':input').eq(0).focus()
-      e.preventDefault()
     hide: (e) ->
+      e && e.preventDefault()
       m = @$modal
       o = @$overlay
       if m.find(':focus').length then return
@@ -62,7 +63,6 @@
       if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
       if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
       @unbindModalEvents()
-      e.preventDefault()
     showModal: ->
       @$modal.addClass('wdz-active')
     showOverlay: ->
