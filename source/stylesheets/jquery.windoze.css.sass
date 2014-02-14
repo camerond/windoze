@@ -1,0 +1,30 @@
+body
+  background: #ddd
+
+#modal_layer
+  position: fixed
+  left: 0
+  top: 0
+  bottom: 0
+  right: 0
+  background: transparentize(black, .5)
+  -webkit-transition: opacity .15s
+  z-index: 1000
+
+#modal
+  position: absolute
+  background: white
+  width: 500px
+  height: 500px
+  left: 50%
+  margin-left: -250px
+  top: 100px
+  -webkit-transition: opacity .3s
+  z-index: 1001
+
+#modal,
+#modal_layer
+  display: none
+  opacity: 0
+  &.wdz-active
+    opacity: 1

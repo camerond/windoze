@@ -1,0 +1,13 @@
+!!!
+%html
+  %head
+    %title Windoze
+    %script(type="text/javascript" src="/javascripts/jquery.min.js")
+    %script(type="text/javascript" src="/javascripts/jquery.windoze.js")
+    %link(rel="stylesheet" href="/stylesheets/jquery.windoze.css" type="text/css")
+    :javascript
+      $(document).ready(function() {
+        $('a').windoze()
+      });
+  %body
+    = yield
