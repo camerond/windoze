@@ -47,7 +47,7 @@
           .attr('id', if id then id.join().replace('#', ''))
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
-    show: (e) ->
+    showAll: (e) ->
       e && e.preventDefault()
       @fireCallback('beforeShow')
       @$modal.show()
@@ -56,7 +56,7 @@
       if @duration.overlay then setTimeout $.proxy(@showOverlay, @), @duration.overlay else @showOverlay()
       @bindModalEvents()
       @$modal.find(':input').eq(0).focus()
-    hide: (e) ->
+    hideAll: (e) ->
       e && e.preventDefault()
       @$modal.removeClass('wdz-active')
       @$overlay.removeClass('wdz-active')
@@ -75,27 +75,27 @@
     hideOverlay: ->
       @$overlay.hide()
     open: ->
-      $(@).data('windoze').show()
+      $(@).data('windoze').showAll()
     close: ->
-      $(@).data('windoze').hide()
+      $(@).data('windoze').hideAll()
     keydownHandler: (e) ->
       if e.which == 27
-        if !@$modal.find(':focus').length then @hide()
+        if !@$modal.find(':focus').length then @hideAll()
     bindModalEvents: ->
-      @$overlay.on('click.wdz', $.proxy(@hide, @))
-      @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hide, @))
+      @$overlay.on('click.wdz', $.proxy(@hideAll, @))
+      @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hideAll, @))
       $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(@keydownHandler, @))
     unbindModalEvents: ->
       @$overlay.off('click.wdz')
       @$modal.off('click.wdz')
       $(document).off('keydown.wdz')
     bindTriggerEvents: ->
-      @$el.on('click.wdz', @delegate, $.proxy(@show, @))
+      @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
     init: ->
       @createModalOverlay()
       @createModalWindow()
       @bindTriggerEvents()
-      @hide()
+      @hideAll()
       @$el
 
   $.fn[windoze.name] = (opts) ->
