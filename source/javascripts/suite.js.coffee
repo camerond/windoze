@@ -213,4 +213,14 @@
     $trigger.click()
     tester.verifyVisible()
 
+  asyncTest 'calling windoze() on a delegated link loads a remote file', ->
+    tester.use('.remote_load')
+    $trigger = tester.init({
+      delegate: 'a'
+      afterLoad: ->
+        start()
+    }, $('.remote_load'));
+    $trigger.find('a').click()
+    tester.verifyVisible()
+
 )(jQuery)
