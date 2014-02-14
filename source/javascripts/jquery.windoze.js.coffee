@@ -32,6 +32,7 @@
     duration:
       modal: 300
       overlay: 150
+    init_shown: false
     fireCallback: (name) ->
       @[name] && $.proxy(@[name], @)()
     createModalOverlay: ->
@@ -47,7 +48,9 @@
           .attr('id', if id then id.join().replace('#', ''))
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
+      @$modal.data('windoze', @)
     showAll: (e) ->
+      if @$modal.is(':visible') then return
       @fireCallback('beforeShow')
       @$modal.show()
       @$overlay.show()
@@ -62,11 +65,16 @@
       e && e.preventDefault()
       @fireCallback('beforeClose')
       @$modal.removeClass('wdz-active')
-      @$overlay.removeClass('wdz-active')
       if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
-      if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
-      @unbindModalEvents()
+      if !@keep_overlay
+        @$overlay.removeClass('wdz-active')
+        if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
     showModal: ->
+      $('.wdz-active').not(@$modal).not(@$overlay).each ->
+        other_wdz = $(@).data('windoze')
+        if other_wdz
+          other_wdz.keep_overlay = other_wdz.$overlay.is(':visible')
+          other_wdz.hideAll()
       @$modal.addClass('wdz-active')
       @fireCallback('afterShow')
     showOverlay: ->
@@ -74,8 +82,10 @@
     hideModal: ->
       @$modal.hide()
       @fireCallback('afterClose')
+      @unbindModalEvents()
     hideOverlay: ->
       @$overlay.hide()
+      @unbindOverlayEvents()
     loadRemote: (href) ->
       if href != '#'
         @fireCallback('beforeLoad')
@@ -96,16 +106,17 @@
       @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hideAll, @))
       $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(@keydownHandler, @))
     unbindModalEvents: ->
-      @$overlay.off('click.wdz')
       @$modal.off('click.wdz')
       $(document).off('keydown.wdz')
+    unbindOverlayEvents: ->
+      @$overlay.off('click.wdz')
     bindTriggerEvents: ->
       @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
     init: ->
       @createModalOverlay()
       @createModalWindow()
       @bindTriggerEvents()
-      @hideAll()
+      !@init_shown && @hideAll()
       @$el
 
   $.fn[windoze.name] = (opts) ->

@@ -223,4 +223,12 @@
     $trigger.find('a').click()
     tester.verifyVisible()
 
+  module 'Options'
+
+  test 'show when initialized', ->
+    tester.init({
+      init_shown: true
+    })
+    tester.verifyVisible()
+
 )(jQuery)
