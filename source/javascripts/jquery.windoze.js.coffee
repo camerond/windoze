@@ -29,6 +29,9 @@
     name: 'windoze'
     container: '#modal'
     delegate: false
+    duration:
+      modal: 300
+      overlay: 150
     createModalOverlay: ->
       @$overlay = $('#modal_layer')
       if !@$overlay.length
@@ -42,16 +45,32 @@
           .attr('id', if id then id.join().replace('#', ''))
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
-    show: ->
+    show: (e) ->
       @$modal.show()
       @$overlay.show()
+      if @duration.modal then setTimeout $.proxy(@showModal, @), @duration.modal else @showModal()
+      if @duration.overlay then setTimeout $.proxy(@showOverlay, @), @duration.overlay else @showOverlay()
       @bindModalEvents()
       @$modal.find(':input').eq(0).focus()
+      e.preventDefault()
     hide: (e) ->
-      if @$modal.find(':focus').length then return
-      @$modal.hide()
-      @$overlay.hide()
+      m = @$modal
+      o = @$overlay
+      if m.find(':focus').length then return
+      m.removeClass('wdz-active')
+      o.removeClass('wdz-active')
+      if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
+      if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
       @unbindModalEvents()
+      e.preventDefault()
+    showModal: ->
+      @$modal.addClass('wdz-active')
+    showOverlay: ->
+      @$overlay.addClass('wdz-active')
+    hideModal: ->
+      @$modal.hide()
+    hideOverlay: ->
+      @$overlay.hide()
     open: ->
       $(@).data('windoze').show()
     close: ->

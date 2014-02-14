@@ -53,8 +53,8 @@
       @data().$modal.shouldBe(':hidden')
       @data().$overlay.shouldBe(':hidden')
     verifyVisible: ->
-      tester.data().$modal.shouldBe(':visible')
-      tester.data().$overlay.shouldBe(':visible')
+      @data().$modal.shouldBe(':visible')
+      @data().$overlay.shouldBe(':visible')
     createElements: (text) ->
       text ||= 'some text'
       $(document.body)
@@ -66,9 +66,13 @@
       @$fixture = $(selector)
       @$fixture.siblings().remove()
     init: (opts, $el)->
+      defaults =
+        duration:
+          modal: 0
+          overlay: 0
       if !@$fixture then @use('.link_trigger')
       @$trigger = $el || @$fixture.find('a').eq(0)
-      $(@$trigger).windoze(opts)
+      $(@$trigger).windoze($.extend(defaults, opts))
 
   QUnit.testDone -> tester.reset()
 
