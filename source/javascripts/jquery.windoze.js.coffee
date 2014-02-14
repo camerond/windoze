@@ -58,7 +58,6 @@
       @$modal.find(':input').eq(0).focus()
     hide: (e) ->
       e && e.preventDefault()
-      if @$modal.find(':focus').length then return
       @$modal.removeClass('wdz-active')
       @$overlay.removeClass('wdz-active')
       if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
@@ -81,7 +80,7 @@
       $(@).data('windoze').hide()
     keydownHandler: (e) ->
       if e.which == 27
-        @hide()
+        if !@$modal.find(':focus').length then @hide()
     bindModalEvents: ->
       @$overlay.on('click.wdz', $.proxy(@hide, @))
       @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hide, @))
