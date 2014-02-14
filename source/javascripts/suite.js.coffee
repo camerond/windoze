@@ -202,4 +202,15 @@
     $(document).pressKey(27, 'escape')
     tester.verifyHidden()
 
+  module 'Remote load'
+
+  asyncTest 'calling windoze() on a link with an href loads a remote file', ->
+    tester.use('.remote_load')
+    $trigger = tester.init({
+      afterLoad: ->
+        start()
+    });
+    $trigger.click()
+    tester.verifyVisible()
+
 )(jQuery)

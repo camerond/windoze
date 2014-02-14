@@ -33,7 +33,7 @@
       modal: 300
       overlay: 150
     fireCallback: (name) ->
-      @[name] && @[name]()
+      @[name] && $.proxy(@[name], @)()
     createModalOverlay: ->
       @$overlay = $('#modal_layer')
       if !@$overlay.length
@@ -48,7 +48,6 @@
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
     showAll: (e) ->
-      e && e.preventDefault()
       @fireCallback('beforeShow')
       @$modal.show()
       @$overlay.show()
@@ -56,13 +55,16 @@
       if @duration.overlay then setTimeout $.proxy(@showOverlay, @), @duration.overlay else @showOverlay()
       @bindModalEvents()
       @$modal.find(':input').eq(0).focus()
+      if e
+        e.preventDefault()
+        @loadRemote($(e.target).attr('href'))
     hideAll: (e) ->
       e && e.preventDefault()
+      @fireCallback('beforeClose')
       @$modal.removeClass('wdz-active')
       @$overlay.removeClass('wdz-active')
       if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
       if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
-      @fireCallback('beforeClose')
       @unbindModalEvents()
     showModal: ->
       @$modal.addClass('wdz-active')
@@ -74,6 +76,14 @@
       @fireCallback('afterClose')
     hideOverlay: ->
       @$overlay.hide()
+    loadRemote: (href) ->
+      if href != '#'
+        @fireCallback('beforeLoad')
+        @$modal.addClass('wdz-loading')
+        @$modal.load href, $.proxy(@loadComplete, @)
+    loadComplete: ->
+      @$modal.removeClass('wdz-loading')
+      @fireCallback('afterLoad')
     open: ->
       $(@).data('windoze').showAll()
     close: ->
