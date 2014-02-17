@@ -178,6 +178,20 @@
     $trigger.find('a.three.trigger').click()
     tester.verifyVisible()
 
+  test 'opening a second modal maintains shared overlay', ->
+    tester.createElements()
+    $('#modal').append($("<a class='trigger2' href='#'>trigger 2</a>"))
+    $('a.trigger2').windoze({
+      container: '#modal2'
+      duration:
+        modal: 0
+        overlay: 0
+    })
+    tester.init().click()
+    $('#modal a').click()
+    $('#modal_layer, #modal2').shouldBe(':visible')
+    $('#modal').shouldNotBe(':visible')
+
   module 'Form Elements',
     setup: ->
       tester.createElements()
