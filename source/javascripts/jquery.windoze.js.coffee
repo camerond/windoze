@@ -29,10 +29,22 @@
     name: 'windoze'
     container: '#modal'
     delegate: false
+    init_shown: false
     duration:
       modal: 300
       overlay: 150
-    init_shown: false
+    open: ->
+      $(@).data('windoze').showAll()
+    close: ->
+      $(@).data('windoze').hideAll()
+    readDataAttributes: ->
+      $el = @$el
+      attrs = ['container', 'delegate', 'init_shown']
+      for attr, i in attrs.map((a) -> $el.attr("data-wdz-#{a}")).filter((n) -> n)
+        @[attrs[i]] = switch
+          when attr == 'true' then true
+          when attr == 'false' then false
+          else attr
     fireCallback: (name) ->
       @[name] && $.proxy(@[name], @)()
     createModalOverlay: ->
@@ -87,17 +99,13 @@
       @$overlay.hide()
       @unbindOverlayEvents()
     loadRemote: (href) ->
-      if href != '#'
-        @fireCallback('beforeLoad')
-        @$modal.addClass('wdz-loading')
-        @$modal.load href, $.proxy(@loadComplete, @)
-    loadComplete: ->
-      @$modal.removeClass('wdz-loading')
-      @fireCallback('afterLoad')
-    open: ->
-      $(@).data('windoze').showAll()
-    close: ->
-      $(@).data('windoze').hideAll()
+      if !href or href == '#' then return
+      @$modal.addClass('wdz-loading')
+      @fireCallback('beforeLoad')
+      @$modal.load href, $.proxy(->
+        @$modal.removeClass('wdz-loading')
+        @fireCallback('afterLoad')
+      , @)
     keydownHandler: (e) ->
       if e.which == 27
         if !@$modal.find(':focus').length then @hideAll()
@@ -113,6 +121,7 @@
     bindTriggerEvents: ->
       @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
     init: ->
+      @readDataAttributes()
       @createModalOverlay()
       @createModalWindow()
       @bindTriggerEvents()

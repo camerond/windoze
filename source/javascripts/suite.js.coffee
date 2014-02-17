@@ -245,4 +245,13 @@
     })
     tester.verifyVisible()
 
+  test 'data attribute support', ->
+    $('.link_trigger a')
+      .attr('data-wdz-delegate', 'true')
+      .attr('data-wdz-init_shown', 'true')
+      .attr('data-wdz-container', '#foo')
+    wdz = tester.init().data('windoze')
+    equal wdz.delegate, true, 'delegate is set to true'
+    equal wdz.init_shown, true, 'init_shown is set to true'
+    equal wdz.container, '#foo', 'container is set to #foo'
 )(jQuery)
