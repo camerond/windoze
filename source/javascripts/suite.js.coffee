@@ -62,6 +62,7 @@
         .append($('<div />').attr('id', 'modal_layer'))
     reset: ->
       $('body > *').not("[id^='qunit-']").remove()
+      @$fixture = false
     use: (selector) ->
       @$fixture = $(selector)
       @$fixture.siblings().remove()
@@ -72,9 +73,9 @@
           overlay: 0
       if !@$fixture then @use('.link_trigger')
       @$trigger = $el || @$fixture.find('a').eq(0)
-      $(@$trigger).windoze($.extend(defaults, opts))
+      @$trigger.windoze($.extend(defaults, opts))
 
-  QUnit.testDone -> tester.reset()
+  QUnit.testDone $.proxy(tester.reset, tester)
 
   module 'Element Creation'
 
@@ -254,4 +255,5 @@
     equal wdz.delegate, true, 'delegate is set to true'
     equal wdz.init_shown, true, 'init_shown is set to true'
     equal wdz.container, '#foo', 'container is set to #foo'
+
 )(jQuery)
