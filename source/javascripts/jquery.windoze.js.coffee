@@ -27,7 +27,7 @@
 
   windoze =
     name: 'windoze'
-    container: '#modal'
+    container: ''
     delegate: false
     init_shown: false
     duration:
@@ -48,16 +48,17 @@
     fireCallback: (name) ->
       @[name] && $.proxy(@[name], @)()
     createModalOverlay: ->
-      @$overlay = $('#modal_layer')
+      @$overlay = $('.wdz-overlay')
       if !@$overlay.length
-        @$overlay = $('<div />').attr('id', 'modal_layer').appendTo($(document.body))
+        @$overlay = $('<div />').addClass('wdz-overlay').appendTo($(document.body))
     createModalWindow: ->
-      @$modal = $(@container)
+      @$modal = $(@container || '.wdz-modal')
       if !@$modal.length
         id = @container.match(/#([a-z0-9\-_]+)/gi)
         klass = @container.match(/\.([a-z0-9\-_]+)/gi)
         @$modal = $('<div />')
           .attr('id', if id then id.join().replace('#', ''))
+          .addClass('wdz-modal')
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
       @$modal.data('windoze', @)

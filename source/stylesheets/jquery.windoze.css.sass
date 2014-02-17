@@ -1,7 +1,7 @@
 body
   background: #ddd
 
-#modal_layer
+.wdz-overlay
   position: fixed
   left: 0
   top: 0
@@ -11,7 +11,7 @@ body
   -webkit-transition: opacity .15s
   z-index: 1000
 
-#modal
+.wdz-modal
   position: absolute
   background: white
   width: 500px
@@ -26,8 +26,8 @@ body
     height: 200px
     background: red
 
-#modal,
-#modal_layer
+.wdz-overlay,
+.wdz-modal
   display: none
   opacity: 0
   &.wdz-active

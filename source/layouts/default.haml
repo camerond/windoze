@@ -8,17 +8,17 @@
     :javascript
       $(document).ready(function() {
         $('a.trigger').windoze({
-          container: '#modal.one',
+          container: '.wdz-modal.one',
           beforeShow: function() {
             this.$modal.find('a').windoze({
               init_shown: true,
-              container: '#modal.two'
+              container: '.wdz-modal.two'
             });
           }
         });
         $('body').windoze({
-          delegate: '#modal.two a',
-          container: '#modal.one'
+          delegate: '.wdz-modal.two a',
+          container: '.wdz-modal.one'
         });
       });
   %body

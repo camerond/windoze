@@ -58,8 +58,8 @@
     createElements: (text) ->
       text ||= 'some text'
       $(document.body)
-        .append($('<div />').attr('id', 'modal').text(text))
-        .append($('<div />').attr('id', 'modal_layer'))
+        .append($('<div />').attr('class', 'wdz-modal').text(text))
+        .append($('<div />').attr('class', 'wdz-overlay'))
     reset: ->
       $('body > *').not("[id^='qunit-']").remove()
       @$fixture = false
@@ -83,20 +83,19 @@
     $trigger = tester.init()
     deepEqual $trigger.hide().show(), $trigger, 'returns trigger properly'
 
-  test 'it uses #modal and #modal_layer if present', ->
+  test 'it uses .wdz-modal and .wdz-overlay if present', ->
     tester.createElements()
     $trigger = tester.init()
     tester.data().$modal
-      .shouldEqual($('#modal'))
+      .shouldEqual($('.wdz-modal'))
       .shouldSay('some text')
 
-  test 'it creates a default #modal and #modal_layer if not present', ->
-    $('#modal, #modal_layer').remove()
+  test 'it creates a default .wdz-modal and .wdz-overlay if not present', ->
     $trigger = tester.init()
     tester.data().$modal
-      .shouldEqual($('#modal'))
+      .shouldEqual($('.wdz-modal'))
       .shouldSay('')
-    tester.data().$overlay.shouldEqual($('#modal_layer'))
+    tester.data().$overlay.shouldEqual($('.wdz-overlay'))
 
   test 'it uses a particular element if one is specified', ->
     $(document.body).append($('<div />').attr('id', 'other_modal').text('foo'))
@@ -124,7 +123,7 @@
     $trigger.click()
     tester.verifyVisible()
     tester.data().$modal
-      .shouldEqual($('#modal'))
+      .shouldEqual($('.wdz-modal'))
       .shouldSay('some text')
 
   test 'passing `open` should open modal', ->
@@ -141,14 +140,14 @@
 
   test 'clicking on any anchor inside modal with [data-wdz-close] closes the modal', ->
     tester.createElements()
-    $('#modal').append("<a href='#' data-wdz-close>close</a>")
+    $('.wdz-modal').append("<a href='#' data-wdz-close>close</a>")
     $('body').append("<a href='#' data-wdz-close>close</a>")
     $trigger = tester.init()
     $trigger.click()
     tester.verifyVisible()
     $('body > a').click()
     tester.verifyVisible()
-    $('#modal a').click()
+    $('.wdz-modal a').click()
     tester.verifyHidden()
 
   test 'typing `esc` should close modal', ->
@@ -181,22 +180,22 @@
 
   test 'opening a second modal maintains shared overlay', ->
     tester.createElements()
-    $('#modal').append($("<a class='trigger2' href='#'>trigger 2</a>"))
+    $('.wdz-modal').append($("<a class='trigger2' href='#'>trigger 2</a>"))
     $('a.trigger2').windoze({
-      container: '#modal2'
+      container: '.two'
       duration:
         modal: 0
         overlay: 0
     })
     tester.init().click()
-    $('#modal a').click()
-    $('#modal_layer, #modal2').shouldBe(':visible')
-    $('#modal').shouldNotBe(':visible')
+    $('.wdz-modal a').click()
+    $('.wdz-overlay, .wdz-modal.two').shouldBe(':visible')
+    $('.wdz-modal').shouldNotBe(':visible')
 
   module 'Form Elements',
     setup: ->
       tester.createElements()
-      $('#modal').append($('<input />').attr('type', 'text'))
+      $('.wdz-modal').append($('<input />').attr('type', 'text'))
 
   test 'the first input/textarea should be focused when modal is shown', ->
     $trigger = tester.init()
