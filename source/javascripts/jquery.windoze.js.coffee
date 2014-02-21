@@ -73,34 +73,35 @@
     showAll: (e) ->
       if @$modal.is(':visible') then return
       @fireCallback('beforeShow')
+      @hideOtherModals()
       @changeTransitionType()
-      @$modal.show()
-      @$overlay.show()
+      @$modal.add(@$overlay).show()
+      @$modal[0].offsetWidth
+      @$overlay[0].offsetWidth
+      @$modal.add(@$overlay).addClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
-      if @overlay_duration then setTimeout $.proxy(@showOverlay, @), @overlay_duration else @showOverlay()
-      @bindModalEvents()
-      @$modal.find(':input').eq(0).focus()
       if e
         e.preventDefault()
         @loadRemote($(e.target).attr('href'))
     hideAll: (e) ->
-      e && e.preventDefault()
+      if !@$modal.is(':visible') then return
       @fireCallback('beforeClose')
       @$modal.removeClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@hideModal, @), @modal_duration else @hideModal()
       if !@keep_overlay
         @$overlay.removeClass('wdz-active')
         if @overlay_duration then setTimeout $.proxy(@hideOverlay, @), @overlay_duration else @hideOverlay()
-    showModal: ->
+      e && e.preventDefault()
+    hideOtherModals: ->
       $('.wdz-active').not(@$modal).not(@$overlay).each ->
         other_wdz = $(@).data('windoze')
         if other_wdz
           other_wdz.keep_overlay = other_wdz.$overlay.is(':visible')
           other_wdz.hideAll()
-      @$modal.addClass('wdz-active')
+    showModal: ->
       @fireCallback('afterShow')
-    showOverlay: ->
-      @$overlay.addClass('wdz-active')
+      @$modal.find(':input').eq(0).focus()
+      @bindModalEvents()
     hideModal: ->
       @$modal.hide()
       @fireCallback('afterClose')
