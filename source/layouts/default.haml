@@ -4,10 +4,28 @@
     %title Windoze
     %script(type="text/javascript" src="/javascripts/jquery.min.js")
     %script(type="text/javascript" src="/javascripts/jquery.windoze.js")
-    %link(rel="stylesheet" href="/stylesheets/jquery.windoze.css" type="text/css")
+    %link(href='http://fonts.googleapis.com/css?family=Cabin' rel='stylesheet' type='text/css')
+    = stylesheet_link_tag "application", "jquery.windoze"
     :javascript
       $(document).ready(function() {
         $('a').windoze();
       });
   %body
-    = yield
+    %header
+      .wrapper
+        %h1 Windoze
+        %h2 A pretty, simple modal plugin
+    %main= yield
+    %footer
+      .wrapper
+        %p
+          &copy; 2014
+          = link_to "Cameron Daigle", "http://camerondaigle.com"
+        %p
+          Heaps of thanks to
+          = link_to "Shane Riley", "http://shaneriley.info"
+          and
+          = link_to "the Bootstrap team", "http://getbootstrap.com"
+          for making modal plugins first and influencing tons of decisions about this one.
+    .wdz-modal
+      %h1 Hey girl

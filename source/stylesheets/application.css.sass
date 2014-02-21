@@ -1,0 +1,122 @@
+@import 'bourbon/bourbon', 'cask', 'reset'
+
+= button
+  position: relative
+  background: saturate($main + #111, 5%)
+  padding: 10px 30px
+  margin: 0 auto
+  display: block
+  max-width: 150px
+  text-align: center
+  text-decoration: none
+  color: #fff
+  -webkit-transition: background-color .2s
+  font-size: 22px
+  &:hover
+    background: saturate($main + #191919, 10%)
+
+$main: #47b667
+
+body
+  background: $main
+  font-family: Cabin, sans-serif
+  color: #fff
+  font-size: 18px
+  line-height: 160%
+  +font-smoothing
+
+header
+  text-align: center
+  padding: 60px 0
+  h1, h2
+    font-size: 100px
+    font-weight: normal
+    line-height: 100%
+  h2
+    font-size: 20px
+    letter-spacing: 4px
+    text-transform: uppercase
+
+.wrapper
+  max-width: 800px
+  padding: 40px 40px 20px 40px
+  margin: 0 auto
+
+a
+  color: #fff
+
+main
+  h1
+    font-size: 30px
+    text-align: center
+    font-weight: normal
+  h1, h2, p, pre
+    margin: 0 0 40px 0
+  pre
+    color: #fff
+    background: darken($main, 10%)
+    padding: 20px 40px
+    font-size: 95%
+    overflow-x: auto
+    code
+      margin: 0
+  p
+    code
+      background: darken($main, 5%)
+      padding: 2px 5px
+      font-size: 95%
+      margin: 0 3px
+  a[data-wdz-animation]
+    +button
+    &:after
+      content: ''
+      position: absolute
+      top: 100%
+      left: 50%
+      margin-left: -8px
+      -webkit-transition: border-color .2s
+      +triangle(16px, saturate($main + #111, 5%), down)
+    &:hover
+      &:after
+        border-top-color: saturate($main + #191919, 10%)
+
+footer
+  background: darken($main, 5%)
+  text-align: center
+  color: transparentize(#fff, .3)
+  font-size: 14px
+  padding: 0 0 80px 0
+  a
+    color: #fff
+
+.examples
+  background: darken($main, 5%)
+  pre
+    margin-top: -20px
+    position: relative
+
+.download
+  background: darken($main, 3%)
+  text-align: center
+  padding-bottom: 20px
+  p
+    margin: 0 0 10px 0
+  a
+    +button
+    display: inline-block
+    margin: 0 10px
+
+.highlight
+  color: transparentize(#fff, .3)
+  .s, .s1, .nl
+    color: #fff
+  .c1
+    color: transparentize(#fff, .6)
+    font-style: italic
+
+.wdz-modal
+  color: $main
+  h1
+    margin: 220px 0 0 0
+    text-align: center
+    font-size: 60px
