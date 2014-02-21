@@ -97,13 +97,17 @@
       .shouldSay('')
     tester.data().$overlay.shouldEqual($('.wdz-overlay'))
 
+  test 'any created .wdz-modal has a unique id', ->
+    $trigger = tester.init()
+    ok tester.data().$modal.attr('id').match(/\bwdz-\d{4}\b/), 'modal has an id of wdz-[4 digits]'
+
   test 'it uses a particular element if one is specified', ->
-    $(document.body).append($('<div />').attr('id', 'other_modal').text('foo'))
+    $(document.body).append($('<div />').addClass('wdz-modal').attr('id', 'other_modal').text('foo'))
     $trigger = tester.init(
       container: '#other_modal'
     )
     tester.data().$modal
-      .shouldEqual($('#other_modal'))
+      .shouldEqual($('.wdz-modal#other_modal'))
       .shouldSay('foo')
 
   test 'it creates a particular element if one is specified and does not exist', ->
@@ -190,7 +194,7 @@
     tester.init().click()
     $('.wdz-modal a').click()
     $('.wdz-overlay, .wdz-modal.two').shouldBe(':visible')
-    $('.wdz-modal').shouldNotBe(':visible')
+    $('.wdz-modal').not('.two').shouldNotBe(':visible')
 
   module 'Form Elements',
     setup: ->

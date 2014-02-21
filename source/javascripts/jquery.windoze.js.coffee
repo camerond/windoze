@@ -52,12 +52,12 @@
       if !@$overlay.length
         @$overlay = $('<div />').addClass('wdz-overlay').appendTo($(document.body))
     createModalWindow: ->
-      @$modal = $(@container || '.wdz-modal')
+      @$modal = $(".wdz-modal#{@container}").eq(0)
       if !@$modal.length
         id = @container.match(/#([a-z0-9\-_]+)/gi)
         klass = @container.match(/\.([a-z0-9\-_]+)/gi)
         @$modal = $('<div />')
-          .attr('id', if id then id.join().replace('#', ''))
+          .attr('id', if id then id.join().replace('#', '') else "wdz-#{('' + Math.random()).slice(2, 6)}")
           .addClass('wdz-modal')
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
