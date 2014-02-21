@@ -7,19 +7,7 @@
     %link(rel="stylesheet" href="/stylesheets/jquery.windoze.css" type="text/css")
     :javascript
       $(document).ready(function() {
-        $('a.trigger').windoze({
-          container: '.wdz-modal.one',
-          beforeShow: function() {
-            this.$modal.find('a').windoze({
-              init_shown: true,
-              container: '.wdz-modal.two'
-            });
-          }
-        });
-        $('body').windoze({
-          delegate: '.wdz-modal.two a',
-          container: '.wdz-modal.one'
-        });
+        $('a').windoze();
       });
   %body
     = yield
