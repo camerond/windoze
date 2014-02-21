@@ -9,26 +9,38 @@ body
   right: 0
   background: transparentize(black, .5)
   -webkit-transition: opacity .15s
+  opacity: 0
   z-index: 1000
+  display: none
+  &.wdz-active
+    opacity: 1
 
-.wdz-modal
-  position: absolute
-  background: white
-  width: 500px
-  height: 500px
-  left: 50%
-  margin-left: -250px
-  top: 100px
-  -webkit-transition: opacity .3s
-  z-index: 1001
-  &.two
-    width: 200px
-    height: 200px
-    background: red
-
-.wdz-overlay,
 .wdz-modal
   display: none
+  position: fixed
+  background: white
+  top: 100px
+  left: 50%
+  width: 500px
+  height: 500px
+  margin-left: -250px
+  z-index: 1001
+  -webkit-transition: opacity .3s
   opacity: 0
   &.wdz-active
     opacity: 1
+  &.wdz-animate-slide-top
+    margin-top: -50px
+    -webkit-transition-property: margin-top, opacity
+    &.wdz-active
+      margin-top: 0
+  &.wdz-animate-slide-left
+    left: 40%
+    -webkit-transition-property: left, opacity
+    &.wdz-active
+      left: 50%
+  &.wdz-animate-pop-down
+    top: -100%
+    -webkit-transition-property: top
+    &.wdz-active
+      top: 0
