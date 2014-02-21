@@ -1,6 +1,6 @@
-# jQuery windoze Plugin
+# jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.0.1
+# version 0.1
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -57,7 +57,7 @@
         id = @container.match(/#([a-z0-9\-_]+)/gi)
         klass = @container.match(/\.([a-z0-9\-_]+)/gi)
         @$modal = $('<div />')
-          .attr('id', if id then id.join().replace('#', '') else "wdz-#{('' + Math.random()).slice(2, 6)}")
+          .attr('id', if id then id.join().replace('#', '') else @generateID())
           .addClass('wdz-modal')
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
@@ -70,14 +70,18 @@
     detectTransitionDuration: ($el) ->
       duration = +$el.css('transition-duration').split(' ')[0].replace(/([^0-9\.]+)/, '')
       if duration then duration * 1000 else false
+    generateID: ->
+      "wdz-#{('' + Math.random()).slice(2, 6)}"
+    forceReflow: ->
+      @$modal[0].offsetWidth
+      @$overlay[0].offsetWidth
     showAll: (e) ->
       if @$modal.is(':visible') then return
       @fireCallback('beforeShow')
       @hideOtherModals()
       @changeTransitionType()
       @$modal.add(@$overlay).show()
-      @$modal[0].offsetWidth
-      @$overlay[0].offsetWidth
+      @forceReflow()
       @$modal.add(@$overlay).addClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
       if e
@@ -108,7 +112,6 @@
       @unbindModalEvents()
     hideOverlay: ->
       @$overlay.hide()
-      @unbindOverlayEvents()
     loadRemote: (href) ->
       if !href or href == '#' then return
       @$modal.addClass('wdz-loading')
@@ -125,10 +128,8 @@
       @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hideAll, @))
       $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(@keydownHandler, @))
     unbindModalEvents: ->
-      @$modal.off('click.wdz')
+      @$modal.add(@$overlay).off('click.wdz')
       $(document).off('keydown.wdz')
-    unbindOverlayEvents: ->
-      @$overlay.off('click.wdz')
     bindTriggerEvents: ->
       @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
     init: ->
