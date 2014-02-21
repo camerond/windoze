@@ -242,7 +242,7 @@
     })
     tester.verifyVisible()
 
-  test 'Assign different animation class', ->
+  test 'assign different animation class', ->
     tester.init({
       animation: 'pop-down'
     }).click()
@@ -250,12 +250,12 @@
 
   test 'data attribute support', ->
     $('.link_trigger a')
-      .attr('data-wdz-delegate', 'true')
+      .attr('data-wdz-delegate', 'a.bar')
       .attr('data-wdz-init_shown', 'true')
       .attr('data-wdz-container', '#foo')
       .attr('data-wdz-animation', 'pop-down')
     wdz = tester.init().data('windoze')
-    equal wdz.delegate, true, 'delegate is set to true'
+    equal wdz.delegate, 'a.bar', 'delegate is set to a.bar'
     equal wdz.init_shown, true, 'init_shown is set to true'
     equal wdz.container, '#foo', 'container is set to #foo'
     equal wdz.animation, 'pop-down', 'animation is set to pop-down'
