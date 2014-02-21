@@ -65,7 +65,6 @@
       @$modal.data('windoze', @)
     changeTransitionType: ->
       @$modal.attr 'class', (i, c) -> c.replace(/\bwdz-animate\-\S+/g, '')
-      console.log @animation
       if @animation
         @$modal.addClass("wdz-animate-#{@animation}")
     detectTransitionDuration: ($el) ->

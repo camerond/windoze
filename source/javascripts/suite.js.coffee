@@ -234,6 +234,22 @@
     $trigger.find('a').click()
     tester.verifyVisible()
 
+  module 'Animation'
+
+  test 'assign different animation class', ->
+    tester.init({
+      animation: 'pop-down'
+    }).click()
+    tester.data().$modal.shouldBe('.wdz-animate-pop-down')
+
+  test 'detect animation duration from css', ->
+    tester.createElements()
+    $('.wdz-modal').css('transition-duration', '2s')
+    $('.wdz-overlay').css('transition-duration', '1500ms')
+    tester.init()
+    equal tester.data().modal_duration, '2000', 'duration detected successfully'
+    equal tester.data().overlay_duration, '1500', 'duration detected successfully'
+
   module 'Options'
 
   test 'show when initialized', ->
@@ -241,12 +257,6 @@
       init_shown: true
     })
     tester.verifyVisible()
-
-  test 'assign different animation class', ->
-    tester.init({
-      animation: 'pop-down'
-    }).click()
-    tester.data().$modal.shouldBe('.wdz-animate-pop-down')
 
   test 'data attribute support', ->
     $('.link_trigger a')
