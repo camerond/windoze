@@ -67,13 +67,9 @@
       @$fixture = $(selector)
       @$fixture.siblings().remove()
     init: (opts, $el)->
-      defaults =
-        duration:
-          modal: 0
-          overlay: 0
       if !@$fixture then @use('.link_trigger')
       @$trigger = $el || @$fixture.find('a').eq(0)
-      @$trigger.windoze($.extend(defaults, opts))
+      @$trigger.windoze(opts)
 
   QUnit.testDone $.proxy(tester.reset, tester)
 
@@ -187,9 +183,6 @@
     $('.wdz-modal').append($("<a class='trigger2' href='#'>trigger 2</a>"))
     $('a.trigger2').windoze({
       container: '.two'
-      duration:
-        modal: 0
-        overlay: 0
     })
     tester.init().click()
     $('.wdz-modal a').click()
@@ -249,14 +242,22 @@
     })
     tester.verifyVisible()
 
+  test 'Assign different animation class', ->
+    tester.init({
+      animation: 'pop-down'
+    }).click()
+    tester.data().$modal.shouldBe('.wdz-animate-pop-down')
+
   test 'data attribute support', ->
     $('.link_trigger a')
       .attr('data-wdz-delegate', 'true')
       .attr('data-wdz-init_shown', 'true')
       .attr('data-wdz-container', '#foo')
+      .attr('data-wdz-animation', 'pop-down')
     wdz = tester.init().data('windoze')
     equal wdz.delegate, true, 'delegate is set to true'
     equal wdz.init_shown, true, 'init_shown is set to true'
     equal wdz.container, '#foo', 'container is set to #foo'
+    equal wdz.animation, 'pop-down', 'animation is set to pop-down'
 
 )(jQuery)

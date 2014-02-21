@@ -30,27 +30,27 @@
     container: ''
     delegate: false
     init_shown: false
-    duration:
-      modal: 300
-      overlay: 150
     open: ->
       $(@).data('windoze').showAll()
     close: ->
       $(@).data('windoze').hideAll()
     readDataAttributes: ->
       $el = @$el
-      attrs = ['container', 'delegate', 'init_shown']
-      for attr, i in attrs.map((a) -> $el.attr("data-wdz-#{a}")).filter((n) -> n)
-        @[attrs[i]] = switch
-          when attr == 'true' then true
-          when attr == 'false' then false
-          else attr
+      attrs = ['container', 'delegate', 'init_shown', 'animation']
+      detected_attrs = attrs.map((a) -> $el.attr("data-wdz-#{a}"))
+      for attr, i in detected_attrs
+        if attr
+          @[attrs[i]] = switch
+            when attr == 'true' then true
+            when attr == 'false' then false
+            else attr
     fireCallback: (name) ->
       @[name] && $.proxy(@[name], @)()
     createModalOverlay: ->
       @$overlay = $('.wdz-overlay')
       if !@$overlay.length
         @$overlay = $('<div />').addClass('wdz-overlay').appendTo($(document.body))
+      @overlay_duration = @detectTransitionDuration(@$overlay)
     createModalWindow: ->
       @$modal = $(".wdz-modal#{@container}").eq(0)
       if !@$modal.length
@@ -61,14 +61,24 @@
           .addClass('wdz-modal')
           .addClass(if klass then klass.join(' ').replace(/\./g, ''))
           .appendTo($(document.body))
+      @modal_duration = @detectTransitionDuration(@$modal)
       @$modal.data('windoze', @)
+    changeTransitionType: ->
+      @$modal.attr 'class', (i, c) -> c.replace(/\bwdz-animate\-\S+/g, '')
+      console.log @animation
+      if @animation
+        @$modal.addClass("wdz-animate-#{@animation}")
+    detectTransitionDuration: ($el) ->
+      duration = +$el.css('transition-duration').split(' ')[0].replace(/([^0-9\.]+)/, '')
+      if duration then duration * 1000 else false
     showAll: (e) ->
       if @$modal.is(':visible') then return
       @fireCallback('beforeShow')
+      @changeTransitionType()
       @$modal.show()
       @$overlay.show()
-      if @duration.modal then setTimeout $.proxy(@showModal, @), @duration.modal else @showModal()
-      if @duration.overlay then setTimeout $.proxy(@showOverlay, @), @duration.overlay else @showOverlay()
+      if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
+      if @overlay_duration then setTimeout $.proxy(@showOverlay, @), @overlay_duration else @showOverlay()
       @bindModalEvents()
       @$modal.find(':input').eq(0).focus()
       if e
@@ -78,10 +88,10 @@
       e && e.preventDefault()
       @fireCallback('beforeClose')
       @$modal.removeClass('wdz-active')
-      if @duration.modal then setTimeout $.proxy(@hideModal, @), @duration.modal else @hideModal()
+      if @modal_duration then setTimeout $.proxy(@hideModal, @), @modal_duration else @hideModal()
       if !@keep_overlay
         @$overlay.removeClass('wdz-active')
-        if @duration.overlay then setTimeout $.proxy(@hideOverlay, @), @duration.overlay else @hideOverlay()
+        if @overlay_duration then setTimeout $.proxy(@hideOverlay, @), @overlay_duration else @hideOverlay()
     showModal: ->
       $('.wdz-active').not(@$modal).not(@$overlay).each ->
         other_wdz = $(@).data('windoze')
