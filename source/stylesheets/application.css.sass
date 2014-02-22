@@ -14,6 +14,9 @@
   font-size: 22px
   &:hover
     background: saturate($main + #191919, 10%)
+  +mobile
+    padding: 10px
+    font-size: 20px
 
 $main: #47b667
 
@@ -24,6 +27,9 @@ body
   font-size: 18px
   line-height: 160%
   +font-smoothing
+  -webkit-text-size-adjust: none
+  +mobile
+    font-size: 16px
 
 header
   text-align: center
@@ -36,11 +42,17 @@ header
     font-size: 20px
     letter-spacing: 4px
     text-transform: uppercase
+  +mobile
+    padding: 20px 0
+    h1
+      font-size: 70px
 
 .wrapper
   max-width: 800px
   padding: 40px 40px 20px 40px
   margin: 0 auto
+  +mobile
+    padding: 30px 10px 10px 10px
 
 a
   color: #fff
@@ -50,8 +62,12 @@ main
     font-size: 30px
     text-align: center
     font-weight: normal
+    +mobile
+      font-size: 22px
   h1, h2, p, pre
     margin: 0 0 40px 0
+    +mobile
+      margin: 0 0 20px 0
   pre
     color: #fff
     background: darken($main, 10%)
@@ -60,6 +76,8 @@ main
     overflow-x: auto
     code
       margin: 0
+    +mobile
+      padding: 10px
   p
     code
       background: darken($main, 5%)
@@ -85,7 +103,7 @@ footer
   text-align: center
   color: transparentize(#fff, .3)
   font-size: 14px
-  padding: 0 0 80px 0
+  padding: 0 0 40px 0
   a
     color: #fff
 
@@ -94,6 +112,8 @@ footer
   pre
     margin-top: -20px
     position: relative
+    +mobile
+      margin-top: -10px
 
 .download
   background: darken($main, 3%)
