@@ -30,6 +30,10 @@ Windoze uses CSS3 animations exclusively. You can specify which animation to use
 
 Windoze has a wealth of callbacks (listed below), and you don't have to pass any duration parameters - they're timed according to the transition speed specified in the CSS.
 
+# Easy operation.
+
+You can open the modal directly by calling `.windoze('open')`, and close it by calling `.windoze('close')` or clicking any anchor with a `data-wdz-close` attribute.
+
 # Easy trigger delegation.
 
 If you want Windoze to fire from an anchor that's not in the DOM yet, rather than dealing with callbacks, you can delegate Windoze to a parent element:
@@ -45,10 +49,6 @@ $('.cool_container').windoze({
 You can also set any of the following options (except the callback functions) via `data-wdz` attributes on the element triggering the modal, e.g. `data-wdz-animation='pop-down'`.
 
 ```javascript
-// directly open/close the modal
-$foo.windoze('open')
-$foo.windoze('close')
-
 $foo.windoze({
 
   // toggles animation class of wdz-animation-[x] (defaults to fade)
