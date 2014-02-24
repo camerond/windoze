@@ -21,22 +21,24 @@
 $main: #47b667
 
 .wdz-modal
-  width: 500px
-  height: 500px
-  margin-left: -250px
-  color: $main
-  text-align: center
-  h1
-    margin: 220px 0 20px 0
-    font-size: 60px
-  p
-    font-size: 20px
-  +mobile
-    width: 300px
-    height: 300px
-    margin-left: -150px
+  article
+    width: 500px
+    height: 500px
+    margin-left: -250px
+    color: $main
+    text-align: center
     h1
-      margin-top: 130px
+      margin: 220px 0 20px 0
+      font-size: 60px
+    p
+      font-size: 20px
+  +mobile
+    article
+      width: 300px
+      height: 300px
+      margin-left: -150px
+      h1
+        margin-top: 130px
 
 body
   background: $main

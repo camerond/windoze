@@ -1,6 +1,6 @@
 # jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.1
+# version 0.2
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -125,8 +125,13 @@
     keydownHandler: (e) ->
       if e.which == 27
         if !@$modal.find(':focus').length then @hideAll()
+    outsideClickHandler: (e) ->
+      $t = $(e.target)
+      if $t.is(@$overlay) or $t.is(@$modal)
+        e.stopPropagation()
+        @hideAll()
     bindModalEvents: ->
-      @$overlay.on('click.wdz', $.proxy(@hideAll, @))
+      @$overlay.add(@$modal).on('click.wdz', $.proxy(@outsideClickHandler, @))
       @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hideAll, @))
       $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(@keydownHandler, @))
     unbindModalEvents: ->

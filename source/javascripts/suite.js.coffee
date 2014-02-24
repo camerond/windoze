@@ -125,18 +125,29 @@
     tester.data().$modal
       .shouldEqual($('.wdz-modal'))
       .shouldSay('some text')
+    $(document.body).shouldBe('.wdz-modal-open')
 
   test 'passing `open` should open modal', ->
     $trigger = tester.init()
     $trigger.windoze('open')
     tester.verifyVisible()
 
-  test 'clicking on the overlay closes the modal', ->
+  test 'clicking on the overlay or the base modal container closes the modal', ->
     $trigger = tester.init()
+    $trigger.click()
+    tester.verifyVisible()
+    ok true, 'clicking on element in modal should not close modal'
+    tester.data().$modal.children().eq(0).click()
+    tester.verifyVisible()
+    ok true, 'clicking on base modal element should close modal'
+    tester.data().$modal.click()
+    tester.verifyHidden()
+    ok true, 'clicking on overlay should close modal'
     $trigger.click()
     tester.verifyVisible()
     tester.data().$overlay.click()
     tester.verifyHidden()
+    $(document.body).shouldNotBe('.wdz-modal-open')
 
   test 'clicking on any anchor inside modal with [data-wdz-close] closes the modal', ->
     tester.createElements()
