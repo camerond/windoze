@@ -1,5 +1,10 @@
 // Basic positioning styles for jQuery Windoze plugin v0.1
 
+body.wdz-modal-open
+  overflow: hidden
+  .wdz-active
+    opacity: 1
+
 .wdz-overlay
   position: fixed
   left: 0
@@ -11,8 +16,6 @@
   opacity: 0
   z-index: 1000
   display: none
-  &.wdz-active
-    opacity: 1
 
 .wdz-modal
   display: none
@@ -24,8 +27,6 @@
   -webkit-transition: opacity .3s
   opacity: 0
   background: #fff
-  &.wdz-active
-    opacity: 1
   &.wdz-animate-slide-top
     margin-top: -50px
     -webkit-transition-property: margin-top, opacity

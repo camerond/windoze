@@ -78,6 +78,7 @@
     showAll: (e) ->
       if @$modal.is(':visible') then return
       @fireCallback('beforeShow')
+      $(document.body).addClass('wdz-modal-open')
       @hideOtherModals()
       @changeTransitionType()
       @$modal.add(@$overlay).show()
@@ -108,6 +109,7 @@
       @bindModalEvents()
     hideModal: ->
       @$modal.hide()
+      $(document.body).removeClass('wdz-modal-open')
       @fireCallback('afterClose')
       @unbindModalEvents()
     hideOverlay: ->
