@@ -1,5 +1,14 @@
 @import 'bourbon/bourbon', 'cask', 'reset'
 
+.wdz-modal
+  width: 500px
+  height: 500px
+  margin-left: -250px
+  +mobile
+    width: 300px
+    height: 300px
+    margin-left: -150px
+
 = button
   position: relative
   background: saturate($main + #111, 5%)

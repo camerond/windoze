@@ -8,18 +8,18 @@ If the anchor that triggers a Windoze modal has an `href` that isn't just `#`, W
 
 # On-the-fly modal creation.
 
-If a `container` option isn't specified, Windoze looks for a `.wdz-modal` already on the page. If there isn't one, it'll create a new one on the fly (and load into it from the `href`). You can add additional classes via the `container` option. For example, this will look for (or create) a `.wdz-modal` with an additional class of `party` and id of `pants`:
+If a `container` option isn't specified, Windoze looks for a `.wdz-modal` already on the page. If there isn't one, it'll create a new one on the fly (and load into it from the `href`). You can add additional classes via the `container` option. For example, this will look for (or create) a `.wdz-modal` with an additional id of `hammer` and class of `pants`:
 
 ```javascript
 $('a.cool_link').windoze({
-  container: '#pants.party'
+  container: '#hammer.pants'
 });
 ```
 
 So will this:
 
 ```html
-<a href='#' data-wdz-container='#pants.party'>Pants party</a>
+<a href='#' data-wdz-container='#hammer.pants'>Stop. Hammertime.</a>
 ```
 
 # Built-in animations.
@@ -51,8 +51,8 @@ $foo.windoze('close')
 
 $foo.windoze({
 
-  // animation (defaults to fade)
-  // built-in options are slide-top, slide-left and pop-down
+  // toggles animation class of wdz-animation-[x] (defaults to fade)
+  // other built-in options are slide-top, slide-left and pop-down
   animation: ''
 
   // additional classes/IDs for container (selector string)
