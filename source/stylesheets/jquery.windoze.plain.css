@@ -1,0 +1,63 @@
+/* Basic positioning styles for jQuery Windoze plugin v0.2 */
+/* Generated from Sass source */
+
+body.wdz-modal-open {
+  overflow: hidden;
+}
+body.wdz-modal-open .wdz-active {
+  opacity: 1;
+}
+
+.wdz-overlay {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-transition: opacity 0.15s;
+  opacity: 0;
+  z-index: 1000;
+  display: none;
+}
+
+.wdz-modal {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+  overflow-y: scroll;
+  z-index: 1001;
+  -webkit-transition: opacity 0.3s;
+  opacity: 0;
+}
+.wdz-modal article {
+  position: absolute;
+  background: white;
+  top: 100px;
+  left: 50%;
+}
+.wdz-modal.wdz-animate-slide-top {
+  margin-top: -50px;
+  -webkit-transition-property: margin-top, opacity;
+}
+.wdz-modal.wdz-animate-slide-top.wdz-active {
+  margin-top: 0;
+}
+.wdz-modal.wdz-animate-slide-left {
+  left: -10%;
+  -webkit-transition-property: left, opacity;
+}
+.wdz-modal.wdz-animate-slide-left.wdz-active {
+  left: 0;
+}
+.wdz-modal.wdz-animate-pop-down {
+  top: -100%;
+  -webkit-transition-property: top;
+}
+.wdz-modal.wdz-animate-pop-down.wdz-active {
+  top: 0;
+}
