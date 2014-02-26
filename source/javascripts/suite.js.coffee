@@ -235,6 +235,16 @@
     $trigger.click()
     tester.verifyVisible()
 
+  asyncTest 'calling windoze() on a link with an href to an image loads that image into an article', ->
+    tester.use('.remote_image')
+    $trigger = tester.init({
+      afterLoad: ->
+        start()
+    });
+    $trigger.click()
+    equal tester.data().$modal.find('article').length, 1, 'article is appended to modal'
+    equal tester.data().$modal.find('article img').length, 1, 'image is appended to article'
+
   asyncTest 'calling windoze() on a delegated link loads a remote file', ->
     tester.use('.remote_load')
     $trigger = tester.init({
