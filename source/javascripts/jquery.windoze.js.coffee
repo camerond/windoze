@@ -90,7 +90,7 @@
         href = $(e.target).attr('href') || $(e.target).closest('a').attr('href')
         if href.match(/\.(gif|jpg|jpeg|png)$/)
           @loadImage href
-        else if href
+        else if href and href != '#'
           @loadRemote href
     hideAll: (e) ->
       if !@$modal.is(':visible') then return
@@ -113,24 +113,24 @@
       @bindModalEvents()
     hideModal: ->
       @$modal.hide()
-      $(document.body).removeClass('wdz-modal-open')
       @fireCallback('afterClose')
       @unbindModalEvents()
     hideOverlay: ->
       @$overlay.hide()
+      $(document.body).removeClass('wdz-modal-open')
     loadImage: (href) ->
       @$modal.addClass('wdz-loading')
       @fireCallback('beforeLoad')
+      @$modal.empty()
       $img = $('<img />', { src: href }).on("load", $.proxy(->
         @$modal.removeClass('wdz-loading')
         @fireCallback('afterLoad')
       , @))
       @$modal.append($('<article />').append($img))
     loadRemote: (href) ->
+      @$modal.empty()
       @$modal.addClass('wdz-loading')
       @fireCallback('beforeLoad')
-      if href.match(/\.(gif|jpg|jpeg|png)$/)
-        @$modal.empty()
       @$modal.load href, $.proxy(->
         @$modal.removeClass('wdz-loading')
         @fireCallback('afterLoad')

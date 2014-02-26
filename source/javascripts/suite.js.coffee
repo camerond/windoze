@@ -231,6 +231,7 @@
     $trigger = tester.init({
       afterLoad: ->
         start()
+        equal $.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully'
     });
     $trigger.click()
     tester.verifyVisible()
@@ -251,6 +252,7 @@
       delegate: 'a'
       afterLoad: ->
         start()
+        equal $.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully'
     }, $('.remote_load'));
     $trigger.find('a').click()
     tester.verifyVisible()
