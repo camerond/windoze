@@ -1,3 +1,7 @@
+/* Basic positioning styles for jQuery Windoze plugin v0.2 */
+/* Generated from Sass source */
+
+
 body.wdz-modal-open {
   overflow: hidden;
 }
