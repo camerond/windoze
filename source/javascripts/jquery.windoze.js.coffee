@@ -1,6 +1,6 @@
 # jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.2
+# version 0.2.1
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -87,7 +87,8 @@
       if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
       if e
         e.preventDefault()
-        @loadRemote($(e.target).attr('href'))
+        href = $(e.target).attr('href') || $(e.target).closest('a').attr('href')
+        @loadRemote href
     hideAll: (e) ->
       if !@$modal.is(':visible') then return
       @fireCallback('beforeClose')
