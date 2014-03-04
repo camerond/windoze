@@ -273,11 +273,25 @@
       tester.use('.remote_load');
       $trigger = tester.init({
         afterLoad: function() {
-          return start();
+          start();
+          return equal($.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully');
         }
       });
       $trigger.click();
       return tester.verifyVisible();
+    });
+    asyncTest('calling windoze() on a link with an href to an image loads that image into an article', function() {
+      var $trigger;
+
+      tester.use('.remote_image');
+      $trigger = tester.init({
+        afterLoad: function() {
+          return start();
+        }
+      });
+      $trigger.click();
+      equal(tester.data().$modal.find('article').length, 1, 'article is appended to modal');
+      return equal(tester.data().$modal.find('article img').length, 1, 'image is appended to article');
     });
     asyncTest('calling windoze() on a delegated link loads a remote file', function() {
       var $trigger;
@@ -286,7 +300,8 @@
       $trigger = tester.init({
         delegate: 'a',
         afterLoad: function() {
-          return start();
+          start();
+          return equal($.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully');
         }
       }, $('.remote_load'));
       $trigger.find('a').click();

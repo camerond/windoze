@@ -44,7 +44,7 @@ summary::-webkit-details-marker {
   text-align: center;
 }
 .wdz-modal article h1 {
-  margin: 220px 0 20px 0;
+  padding: 220px 0 20px 0;
   font-size: 60px;
 }
 .wdz-modal article p {
@@ -57,7 +57,7 @@ summary::-webkit-details-marker {
     margin-left: -150px;
   }
   .wdz-modal article h1 {
-    margin-top: 130px;
+    padding-top: 130px;
   }
 }
 

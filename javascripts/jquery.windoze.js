@@ -89,8 +89,13 @@
         return this.$overlay[0].offsetWidth;
       },
       showAll: function(e) {
+        var href;
+
         if (this.$modal.is(':visible')) {
           return;
+        }
+        if (e) {
+          e.preventDefault();
         }
         this.fireCallback('beforeShow');
         $(document.body).addClass('wdz-modal-open');
@@ -105,8 +110,12 @@
           this.showModal();
         }
         if (e) {
-          e.preventDefault();
-          return this.loadRemote($(e.target).attr('href'));
+          href = $(e.target).attr('href') || $(e.target).closest('a').attr('href');
+          if (href.match(/\.(gif|jpg|jpeg|png)$/)) {
+            return this.loadImage(href);
+          } else if (href && href !== '#') {
+            return this.loadRemote(href);
+          }
         }
       },
       hideAll: function(e) {
@@ -148,17 +157,29 @@
       },
       hideModal: function() {
         this.$modal.hide();
-        $(document.body).removeClass('wdz-modal-open');
         this.fireCallback('afterClose');
         return this.unbindModalEvents();
       },
       hideOverlay: function() {
-        return this.$overlay.hide();
+        this.$overlay.hide();
+        return $(document.body).removeClass('wdz-modal-open');
+      },
+      loadImage: function(href) {
+        var $img;
+
+        this.$modal.addClass('wdz-loading');
+        this.fireCallback('beforeLoad');
+        this.$modal.empty();
+        $img = $('<img />', {
+          src: href
+        }).on("load", $.proxy(function() {
+          this.$modal.removeClass('wdz-loading');
+          return this.fireCallback('afterLoad');
+        }, this));
+        return this.$modal.append($('<article />').append($img));
       },
       loadRemote: function(href) {
-        if (!href || href === '#') {
-          return;
-        }
+        this.$modal.empty();
         this.$modal.addClass('wdz-loading');
         this.fireCallback('beforeLoad');
         return this.$modal.load(href, $.proxy(function() {

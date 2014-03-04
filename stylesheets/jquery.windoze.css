@@ -30,19 +30,18 @@ body.wdz-modal-open .wdz-active {
   z-index: 1001;
   -webkit-transition: opacity 0.3s;
   opacity: 0;
+  padding-top: 100px;
 }
 .wdz-modal article {
-  position: absolute;
   background: white;
-  top: 100px;
-  left: 50%;
+  margin: 0 auto;
 }
 .wdz-modal.wdz-animate-slide-top {
-  margin-top: -50px;
-  -webkit-transition-property: margin-top, opacity;
+  padding-top: 50px;
+  -webkit-transition-property: padding-top, opacity;
 }
 .wdz-modal.wdz-animate-slide-top.wdz-active {
-  margin-top: 0;
+  padding-top: 100px;
 }
 .wdz-modal.wdz-animate-slide-left {
   left: -10%;
@@ -52,6 +51,7 @@ body.wdz-modal-open .wdz-active {
   left: 0;
 }
 .wdz-modal.wdz-animate-pop-down {
+  opacity: 1;
   top: -100%;
   -webkit-transition-property: top;
 }
