@@ -69,6 +69,10 @@
           
           <p>Windoze has a wealth of callbacks (listed below), and you don&rsquo;t have to pass any duration parameters - they&rsquo;re timed according to the transition speed specified in the CSS.</p>
           
+          <h1>Smart image lightboxing.</h1>
+          
+          <p>If your anchor links directly to an image, there&rsquo;s no need to load a partial or build your own markup – Windoze will load that image directly into an <code>article</code> element for you.</p>
+          
           <h1>Easy operation.</h1>
           
           <p>You can open the modal directly by calling <code>.windoze(&#39;open&#39;)</code>, and close it by calling <code>.windoze(&#39;close&#39;)</code> or clicking any anchor with a <code>data-wdz-close</code> attribute.</p>
@@ -77,6 +81,10 @@
           
           <p>If you want Windoze to fire from an anchor that&rsquo;s not in the DOM yet, rather than dealing with callbacks, you can delegate Windoze to a parent element:</p>
           <pre class="highlight javascript"><span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.cool_container&#39;</span><span class="p">).</span><span class="nx">windoze</span><span class="p">({</span>&#x000A;  <span class="na">delegate</span><span class="p">:</span> <span class="s1">&#39;a.cool_link&#39;</span>&#x000A;<span class="p">});</span></pre>
+          <h1>Plus, it&rsquo;s tested.</h1>
+          
+          <p>Sleep easy knowing that Windoze is covered by a <a href="https://github.com/camerond/windoze/blob/master/source/javascripts/suite.js.coffee">pretty comprehensive QUnit suite</a>.</p>
+          
           <h1>Option Reference</h1>
           
           <p>You can also set any of the following options (except the callback functions) via <code>data-wdz</code> attributes on the element triggering the modal, e.g. <code>data-wdz-animation=&#39;pop-down&#39;</code>.</p>
