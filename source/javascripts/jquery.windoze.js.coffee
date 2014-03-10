@@ -52,6 +52,7 @@
         @$overlay = $('<div />').addClass('wdz-overlay').appendTo($(document.body))
       @overlay_duration = @detectTransitionDuration(@$overlay)
     createModalWindow: ->
+      @bindTriggerEvents()
       @$modal = $(".wdz-modal#{@container}").eq(0)
       if !@$modal.length
         id = @container.match(/#([a-z0-9\-_]+)/gi)
@@ -155,8 +156,7 @@
     init: ->
       @readDataAttributes()
       @createModalOverlay()
-      @createModalWindow()
-      @bindTriggerEvents()
+      @$modal = if @$el.is('.wdz-modal') then @$el else @createModalWindow()
       !@init_shown && @hideAll()
       @$el
 
@@ -176,7 +176,7 @@
         $(@).data(windoze.name, plugin_instance)
         plugin_instance.init()
     else
-      $.error('Method #{method} does not exist on jQuery. #{windoze.name}');
+      $.error("Method #{method} does not exist on jQuery. #{windoze.name}");
     return $els;
 
 )(jQuery)

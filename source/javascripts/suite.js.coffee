@@ -273,6 +273,16 @@
     equal tester.data().modal_duration, '2000', 'duration detected successfully'
     equal tester.data().overlay_duration, '1500', 'duration detected successfully'
 
+  module 'Alternate calling'
+
+  test 'allow modal to be initialized on itself', ->
+    tester.createElements()
+    tester.$trigger = $('.wdz-modal')
+    $('.wdz-modal').windoze()
+    tester.verifyHidden()
+    $('.wdz-modal').windoze('open')
+    tester.verifyVisible()
+
   module 'Options'
 
   test 'show when initialized', ->
