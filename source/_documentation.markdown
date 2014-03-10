@@ -30,6 +30,10 @@ Windoze uses CSS3 animations exclusively. You can specify which animation to use
 
 Windoze has a wealth of callbacks (listed below), and you don't have to pass any duration parameters - they're timed according to the transition speed specified in the CSS.
 
+# Smart image lightboxing.
+
+If your anchor links directly to an image, there's no need to load a partial or build your own markup – Windoze will load that image directly into an `article` element for you.
+
 # Easy operation.
 
 You can open the modal directly by calling `.windoze('open')`, and close it by calling `.windoze('close')` or clicking any anchor with a `data-wdz-close` attribute.
@@ -43,6 +47,10 @@ $('.cool_container').windoze({
   delegate: 'a.cool_link'
 });
 ```
+
+# Plus, it's tested.
+
+Sleep easy knowing that Windoze is covered by a [pretty comprehensive QUnit suite](https://github.com/camerond/windoze/blob/master/source/javascripts/suite.js.coffee).
 
 # Option Reference
 
