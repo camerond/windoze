@@ -291,6 +291,22 @@
     })
     tester.verifyVisible()
 
+  test 'disable outside click', ->
+    tester.init({
+      allow_outside_click: false
+    }).windoze('open')
+    tester.verifyVisible()
+    tester.data().$modal.click()
+    tester.verifyVisible()
+
+  test 'disable esc to close', ->
+    tester.init({
+      allow_esc: false
+    }).windoze('open')
+    tester.verifyVisible()
+    $(document).pressKey(27, 'escape')
+    tester.verifyVisible()
+
   test 'data attribute support', ->
     $('.link_trigger a')
       .attr('data-wdz-delegate', 'a.bar')

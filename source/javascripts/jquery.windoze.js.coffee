@@ -30,6 +30,8 @@
     container: ''
     delegate: false
     init_shown: false
+    allow_outside_click: true
+    allow_esc: true
     open: ->
       $(@).data('windoze').showAll()
     close: ->
@@ -145,9 +147,12 @@
         e.stopPropagation()
         @hideAll()
     bindModalEvents: ->
-      @$overlay.add(@$modal).on('click.wdz', $.proxy(@outsideClickHandler, @))
       @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hideAll, @))
-      $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(@keydownHandler, @))
+      if @allow_outside_click
+        @$overlay.add(@$modal).on('click.wdz', $.proxy(@outsideClickHandler, @))
+      $(document).off('keydown.wdz')
+      if @allow_esc
+        $(document).on('keydown.wdz', $.proxy(@keydownHandler, @))
     unbindModalEvents: ->
       @$modal.add(@$overlay).off('click.wdz')
       $(document).off('keydown.wdz')
