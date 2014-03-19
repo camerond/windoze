@@ -22,6 +22,8 @@ So will this:
 <a href='#' data-wdz-container='#hammer.pants'>Stop. Hammertime.</a>
 ```
 
+One note here: the default Windoze stylesheet expects any existing `.wdz-modal` elements to be located at the end of the `<body>`, and the plugin will relocate said elements there by default on initialization. Outside of style inheritance & z-index issues, the plugin itself doesn't care where the modal element is in the DOM, so you can turn this off via an option if you prefer.
+
 # Built-in animations.
 
 Windoze uses CSS3 animations exclusively. You can specify which animation to use via a `data-wdz-animation` on the trigger or an `animation` option in the Javascript – both just toggle a `.wdz-animation-*` class (for example, a `slide-left` option results in toggling a `.wdz-animation-slide-left` class) – so a new animation is as easy as writing a new CSS class.
@@ -65,6 +67,9 @@ $foo.windoze({
 
   // additional classes/IDs for container (selector string)
   container: '',
+
+  // relocate any .wdz-modal element to the end of the <body> on initialization
+  relocate_modals: true,
 
   // delegate trigger event (selector string)
   delegate: '',

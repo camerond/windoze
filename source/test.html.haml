@@ -12,3 +12,7 @@ layout: test
     %a(href='/test/modal') This will load a remote file.
   .remote_image
     %a(href='/images/test.jpg') This will load a remote image.
+  .relocate_modal
+    %a(href='#' data-wdz-container='#relocate_me')
+    .wdz-modal#relocate_me
+      %h1 I should be relocated to the end of the body on initialization.

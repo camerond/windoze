@@ -189,6 +189,12 @@
     $trigger.find('a.three.trigger').click()
     tester.verifyVisible()
 
+  test 'relocate existing wdz-modal element to end of body on initialization', ->
+    tester.use('.relocate_modal')
+    tester.init()
+    tester.data('windoze').$modal.shouldSay($('#relocate_me').text())
+    $(document.body).children().eq(-1).shouldBe("#relocate_me")
+
   test 'opening a second modal maintains shared overlay', ->
     tester.createElements()
     $('.wdz-modal').append($("<a class='trigger2' href='#'>trigger 2</a>"))
@@ -306,6 +312,14 @@
     tester.verifyVisible()
     $(document).pressKey(27, 'escape')
     tester.verifyVisible()
+
+  test 'disable modal relocation', ->
+    tester.use('.relocate_modal')
+    tester.init({
+      relocate_modal: false
+    }).windoze('open')
+    tester.data('windoze').$modal.shouldSay($('#relocate_me').text())
+    $('#relocate_me').parent().shouldBe('.relocate_modal')
 
   test 'data attribute support', ->
     $('.link_trigger a')

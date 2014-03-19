@@ -30,6 +30,7 @@
     container: ''
     delegate: false
     init_shown: false
+    relocate_modal: true
     allow_outside_click: true
     allow_esc: true
     open: ->
@@ -38,7 +39,7 @@
       $(@).data('windoze').hideAll()
     readDataAttributes: ->
       $el = @$el
-      attrs = ['container', 'delegate', 'init_shown', 'animation']
+      attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation']
       detected_attrs = attrs.map((a) -> $el.attr("data-wdz-#{a}"))
       for attr, i in detected_attrs
         if attr
@@ -56,7 +57,9 @@
     createModalWindow: ->
       @bindTriggerEvents()
       @$modal = $(".wdz-modal#{@container}").eq(0)
-      if !@$modal.length
+      if @$modal.length
+        @relocate_modal && @$modal.detach().appendTo($(document.body))
+      else
         id = @container.match(/#([a-z0-9\-_]+)/gi)
         klass = @container.match(/\.([a-z0-9\-_]+)/gi)
         @$modal = $('<div />')
