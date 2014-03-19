@@ -38,7 +38,9 @@ If your anchor links directly to an image, there's no need to load a partial or 
 
 # Easy operation.
 
-You can open the modal directly by calling `.windoze('open')`, and close it by calling `.windoze('close')` or clicking any anchor with a `data-wdz-close` attribute.
+Open the modal via `$el.windoze('open')`, `$el.trigger('open.windoze')`, or `$modal.trigger('open.windoze')`.
+
+Close it by clicking any anchor in the modal with a `data-wdz-close` attribute, or via `$el.windoze('close')`, `$el.trigger('close.windoze')`, or `$modal.trigger('close.windoze')`.
 
 # Easy trigger delegation.
 
@@ -68,7 +70,8 @@ $foo.windoze({
   // additional classes/IDs for container (selector string)
   container: '',
 
-  // relocate any .wdz-modal element to the end of the <body> on initialization
+  // relocate the matching .wdz-modal element to the end of the <body>
+  // upon initialization
   relocate_modals: true,
 
   // delegate trigger event (selector string)

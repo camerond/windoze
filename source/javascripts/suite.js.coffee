@@ -282,11 +282,10 @@
   module 'Alternate calling'
 
   test 'allow modal to be initialized on itself', ->
-    tester.createElements()
-    tester.$trigger = $('.wdz-modal')
-    $('.wdz-modal').windoze()
+    tester.use('.init_on_self')
+    tester.init({}, $('.init_on_self .wdz-modal'))
     tester.verifyHidden()
-    $('.wdz-modal').windoze('open')
+    tester.$trigger.windoze('open')
     tester.verifyVisible()
 
   module 'Options'

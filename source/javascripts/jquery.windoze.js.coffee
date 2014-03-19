@@ -34,9 +34,9 @@
     allow_outside_click: true
     allow_esc: true
     open: ->
-      $(@).data('windoze').showAll()
+      $(@).trigger('open.windoze')
     close: ->
-      $(@).data('windoze').hideAll()
+      $(@).trigger('close.windoze')
     readDataAttributes: ->
       $el = @$el
       attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation']
@@ -55,7 +55,6 @@
         @$overlay = $('<div />').addClass('wdz-overlay').appendTo($(document.body))
       @overlay_duration = @detectTransitionDuration(@$overlay)
     createModalWindow: ->
-      @bindTriggerEvents()
       @$modal = $(".wdz-modal#{@container}").eq(0)
       if @$modal.length
         @relocate_modal && @$modal.detach().appendTo($(document.body))
@@ -107,7 +106,7 @@
         other_wdz = $(@).data('windoze')
         if other_wdz
           other_wdz.keep_overlay = other_wdz.$overlay.is(':visible')
-          other_wdz.hideAll()
+          $(@).trigger('close.windoze')
     showModal: ->
       @fireCallback('afterShow')
       @$modal.find(':input').eq(0).focus()
@@ -142,14 +141,14 @@
       , @)
     keydownHandler: (e) ->
       if e.which == 27
-        if !@$modal.find(':focus').length then @hideAll()
+        if !@$modal.find(':focus').length then @$modal.trigger('close.windoze')
     outsideClickHandler: (e) ->
       $t = $(e.target)
       if $t.is(@$overlay) or $t.is(@$modal)
         e.stopPropagation()
-        @hideAll()
+        @$el.trigger('close.windoze')
     bindModalEvents: ->
-      @$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(@hideAll, @))
+      @$modal.on('click.wdz', 'a[data-wdz-close]', -> $(@).trigger('close.windoze'))
       if @allow_outside_click
         @$overlay.add(@$modal).on('click.wdz', $.proxy(@outsideClickHandler, @))
       $(document).off('keydown.wdz')
@@ -158,13 +157,15 @@
     unbindModalEvents: ->
       @$modal.add(@$overlay).off('click.wdz')
       $(document).off('keydown.wdz')
-    bindTriggerEvents: ->
-      @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
     init: ->
       @readDataAttributes()
       @createModalOverlay()
       @$modal = if @$el.is('.wdz-modal') then @$el else @createModalWindow()
-      !@init_shown && @hideAll()
+      @$modal.add(@$el)
+        .on('open.windoze', $.proxy(@showAll, @))
+        .on('close.windoze', $.proxy(@hideAll, @))
+      @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
+      !@init_shown && @$el.trigger('close.windoze')
       @$el
 
   $.fn[windoze.name] = (opts) ->
