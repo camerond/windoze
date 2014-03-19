@@ -7,17 +7,20 @@
       container: '',
       delegate: false,
       init_shown: false,
+      relocate_modal: true,
+      allow_outside_click: true,
+      allow_esc: true,
       open: function() {
-        return $(this).data('windoze').showAll();
+        return $(this).trigger('open.windoze');
       },
       close: function() {
-        return $(this).data('windoze').hideAll();
+        return $(this).trigger('close.windoze');
       },
       readDataAttributes: function() {
         var $el, attr, attrs, detected_attrs, i, _i, _len, _results;
 
         $el = this.$el;
-        attrs = ['container', 'delegate', 'init_shown', 'animation'];
+        attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation'];
         detected_attrs = attrs.map(function(a) {
           return $el.attr("data-wdz-" + a);
         });
@@ -55,7 +58,9 @@
         var id, klass;
 
         this.$modal = $(".wdz-modal" + this.container).eq(0);
-        if (!this.$modal.length) {
+        if (this.$modal.length) {
+          this.relocate_modal && this.$modal.detach().appendTo($(document.body));
+        } else {
           id = this.container.match(/#([a-z0-9\-_]+)/gi);
           klass = this.container.match(/\.([a-z0-9\-_]+)/gi);
           this.$modal = $('<div />').attr('id', id ? id.join().replace('#', '') : this.generateID()).addClass('wdz-modal').addClass(klass ? klass.join(' ').replace(/\./g, '') : void 0).appendTo($(document.body));
@@ -89,8 +94,6 @@
         return this.$overlay[0].offsetWidth;
       },
       showAll: function(e) {
-        var href;
-
         if (this.$modal.is(':visible')) {
           return;
         }
@@ -109,14 +112,7 @@
         } else {
           this.showModal();
         }
-        if (e) {
-          href = $(e.target).attr('href') || $(e.target).closest('a').attr('href');
-          if (href.match(/\.(gif|jpg|jpeg|png)$/)) {
-            return this.loadImage(href);
-          } else if (href && href !== '#') {
-            return this.loadRemote(href);
-          }
-        }
+        return this.loadFromEvent(e);
       },
       hideAll: function(e) {
         if (!this.$modal.is(':visible')) {
@@ -146,7 +142,7 @@
           other_wdz = $(this).data('windoze');
           if (other_wdz) {
             other_wdz.keep_overlay = other_wdz.$overlay.is(':visible');
-            return other_wdz.hideAll();
+            return $(this).trigger('close.windoze');
           }
         });
       },
@@ -164,12 +160,27 @@
         this.$overlay.hide();
         return $(document.body).removeClass('wdz-modal-open');
       },
+      loadFromEvent: function(e) {
+        var href;
+
+        if (!e) {
+          return;
+        }
+        href = $(e.target).attr('href') || $(e.target).closest('a').attr('href');
+        if (!href || href === '#') {
+          return;
+        }
+        this.$modal.addClass('wdz-loading');
+        this.fireCallback('beforeLoad');
+        if (href.match(/\.(gif|jpg|jpeg|png)$/)) {
+          return this.loadImage(href);
+        } else {
+          return this.loadRemote(href);
+        }
+      },
       loadImage: function(href) {
         var $img;
 
-        this.$modal.addClass('wdz-loading');
-        this.fireCallback('beforeLoad');
-        this.$modal.empty();
         $img = $('<img />', {
           src: href
         }).on("load", $.proxy(function() {
@@ -179,9 +190,6 @@
         return this.$modal.append($('<article />').append($img));
       },
       loadRemote: function(href) {
-        this.$modal.empty();
-        this.$modal.addClass('wdz-loading');
-        this.fireCallback('beforeLoad');
         return this.$modal.load(href, $.proxy(function() {
           this.$modal.removeClass('wdz-loading');
           return this.fireCallback('afterLoad');
@@ -190,7 +198,7 @@
       keydownHandler: function(e) {
         if (e.which === 27) {
           if (!this.$modal.find(':focus').length) {
-            return this.hideAll();
+            return this.$modal.trigger('close.windoze');
           }
         }
       },
@@ -200,27 +208,32 @@
         $t = $(e.target);
         if ($t.is(this.$overlay) || $t.is(this.$modal)) {
           e.stopPropagation();
-          return this.hideAll();
+          return this.$el.trigger('close.windoze');
         }
       },
       bindModalEvents: function() {
-        this.$overlay.add(this.$modal).on('click.wdz', $.proxy(this.outsideClickHandler, this));
-        this.$modal.on('click.wdz', 'a[data-wdz-close]', $.proxy(this.hideAll, this));
-        return $(document).off('keydown.wdz').on('keydown.wdz', $.proxy(this.keydownHandler, this));
+        this.$modal.on('click.wdz', 'a[data-wdz-close]', function() {
+          return $(this).trigger('close.windoze');
+        });
+        if (this.allow_outside_click) {
+          this.$overlay.add(this.$modal).on('click.wdz', $.proxy(this.outsideClickHandler, this));
+        }
+        $(document).off('keydown.wdz');
+        if (this.allow_esc) {
+          return $(document).on('keydown.wdz', $.proxy(this.keydownHandler, this));
+        }
       },
       unbindModalEvents: function() {
         this.$modal.add(this.$overlay).off('click.wdz');
         return $(document).off('keydown.wdz');
       },
-      bindTriggerEvents: function() {
-        return this.$el.on('click.wdz', this.delegate, $.proxy(this.showAll, this));
-      },
       init: function() {
         this.readDataAttributes();
         this.createModalOverlay();
-        this.createModalWindow();
-        this.bindTriggerEvents();
-        !this.init_shown && this.hideAll();
+        this.$modal = this.$el.is('.wdz-modal') ? this.$el : this.createModalWindow();
+        this.$modal.add(this.$el).on('open.windoze', $.proxy(this.showAll, this)).on('close.windoze', $.proxy(this.hideAll, this));
+        this.$el.on('click.wdz', this.delegate, $.proxy(this.showAll, this));
+        !this.init_shown && this.$el.trigger('close.windoze');
         return this.$el;
       }
     };
@@ -242,7 +255,7 @@
           return plugin_instance.init();
         });
       } else {
-        $.error('Method #{method} does not exist on jQuery. #{windoze.name}');
+        $.error("Method " + method + " does not exist on jQuery. " + windoze.name);
       }
       return $els;
     };

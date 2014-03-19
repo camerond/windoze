@@ -226,6 +226,12 @@
       $trigger.find('a.three.trigger').click();
       return tester.verifyVisible();
     });
+    test('relocate existing wdz-modal element to end of body on initialization', function() {
+      tester.use('.relocate_modal');
+      tester.init();
+      tester.data('windoze').$modal.shouldSay($('#relocate_me').text());
+      return $(document.body).children().eq(-1).shouldBe("#relocate_me");
+    });
     test('opening a second modal maintains shared overlay', function() {
       tester.createElements();
       $('.wdz-modal').append($("<a class='trigger2' href='#'>trigger 2</a>"));
@@ -322,12 +328,44 @@
       equal(tester.data().modal_duration, '2000', 'duration detected successfully');
       return equal(tester.data().overlay_duration, '1500', 'duration detected successfully');
     });
+    module('Alternate calling');
+    test('allow modal to be initialized on itself', function() {
+      tester.use('.init_on_self');
+      tester.init({}, $('.init_on_self .wdz-modal'));
+      tester.verifyHidden();
+      tester.$trigger.windoze('open');
+      return tester.verifyVisible();
+    });
     module('Options');
     test('show when initialized', function() {
       tester.init({
         init_shown: true
       });
       return tester.verifyVisible();
+    });
+    test('disable outside click', function() {
+      tester.init({
+        allow_outside_click: false
+      }).windoze('open');
+      tester.verifyVisible();
+      tester.data().$modal.click();
+      return tester.verifyVisible();
+    });
+    test('disable esc to close', function() {
+      tester.init({
+        allow_esc: false
+      }).windoze('open');
+      tester.verifyVisible();
+      $(document).pressKey(27, 'escape');
+      return tester.verifyVisible();
+    });
+    test('disable modal relocation', function() {
+      tester.use('.relocate_modal');
+      tester.init({
+        relocate_modal: false
+      }).windoze('open');
+      tester.data('windoze').$modal.shouldSay($('#relocate_me').text());
+      return $('#relocate_me').parent().shouldBe('.relocate_modal');
     });
     return test('data attribute support', function() {
       var wdz;
