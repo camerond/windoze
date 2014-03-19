@@ -89,12 +89,7 @@
       @forceReflow()
       @$modal.add(@$overlay).addClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
-      if e
-        href = $(e.target).attr('href') || $(e.target).closest('a').attr('href')
-        if href.match(/\.(gif|jpg|jpeg|png)$/)
-          @loadImage href
-        else if href and href != '#'
-          @loadRemote href
+      @loadFromEvent(e)
     hideAll: (e) ->
       if !@$modal.is(':visible') then return
       @fireCallback('beforeClose')
@@ -121,19 +116,23 @@
     hideOverlay: ->
       @$overlay.hide()
       $(document.body).removeClass('wdz-modal-open')
-    loadImage: (href) ->
+    loadFromEvent: (e) ->
+      return if !e
+      href = $(e.target).attr('href') || $(e.target).closest('a').attr('href')
+      return if !href or href == '#'
       @$modal.addClass('wdz-loading')
       @fireCallback('beforeLoad')
-      @$modal.empty()
+      if href.match(/\.(gif|jpg|jpeg|png)$/)
+        @loadImage href
+      else
+        @loadRemote href
+    loadImage: (href) ->
       $img = $('<img />', { src: href }).on("load", $.proxy(->
         @$modal.removeClass('wdz-loading')
         @fireCallback('afterLoad')
       , @))
       @$modal.append($('<article />').append($img))
     loadRemote: (href) ->
-      @$modal.empty()
-      @$modal.addClass('wdz-loading')
-      @fireCallback('beforeLoad')
       @$modal.load href, $.proxy(->
         @$modal.removeClass('wdz-loading')
         @fireCallback('afterLoad')
