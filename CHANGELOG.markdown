@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.2
+
+- add `open.windoze` and `close.windoze` events
+- add `relocate_modal` option
+- fix bug involving missing but expected `href`
+
 ## 0.2.1
 
 - properly detect hrefs if click target is child of a link
