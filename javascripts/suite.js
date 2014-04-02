@@ -305,8 +305,9 @@
       tester.use('.remote_load');
       $trigger = tester.init({
         delegate: 'a',
-        afterLoad: function() {
+        afterLoad: function(e) {
           start();
+          $(e.target).shouldBe('a');
           return equal($.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully');
         }
       }, $('.remote_load'));

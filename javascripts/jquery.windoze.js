@@ -44,8 +44,8 @@
         }
         return _results;
       },
-      fireCallback: function(name) {
-        return this[name] && $.proxy(this[name], this)();
+      fireCallback: function(name, event) {
+        return this[name] && $.proxy(this[name], this)(this.current_event);
       },
       createModalOverlay: function() {
         this.$overlay = $('.wdz-overlay');
@@ -97,9 +97,8 @@
         if (this.$modal.is(':visible')) {
           return;
         }
-        if (e) {
-          e.preventDefault();
-        }
+        e.preventDefault();
+        this.current_event = e;
         this.fireCallback('beforeShow');
         $(document.body).addClass('wdz-modal-open');
         this.hideOtherModals();
@@ -112,12 +111,14 @@
         } else {
           this.showModal();
         }
-        return this.loadFromEvent(e);
+        return e && this.loadFromEvent(e);
       },
       hideAll: function(e) {
         if (!this.$modal.is(':visible')) {
           return;
         }
+        e.preventDefault();
+        this.current_event = e;
         this.fireCallback('beforeClose');
         this.$modal.removeClass('wdz-active');
         if (this.modal_duration) {
@@ -128,12 +129,11 @@
         if (!this.keep_overlay) {
           this.$overlay.removeClass('wdz-active');
           if (this.overlay_duration) {
-            setTimeout($.proxy(this.hideOverlay, this), this.overlay_duration);
+            return setTimeout($.proxy(this.hideOverlay, this), this.overlay_duration);
           } else {
-            this.hideOverlay();
+            return this.hideOverlay();
           }
         }
-        return e && e.preventDefault();
       },
       hideOtherModals: function() {
         return $('.wdz-active').not(this.$modal).not(this.$overlay).each(function() {
@@ -146,12 +146,12 @@
           }
         });
       },
-      showModal: function() {
+      showModal: function(e) {
         this.fireCallback('afterShow');
         this.$modal.find(':input').eq(0).focus();
         return this.bindModalEvents();
       },
-      hideModal: function() {
+      hideModal: function(e) {
         this.$modal.hide();
         this.fireCallback('afterClose');
         return this.unbindModalEvents();
@@ -163,9 +163,6 @@
       loadFromEvent: function(e) {
         var href;
 
-        if (!e) {
-          return;
-        }
         href = $(e.target).attr('href') || $(e.target).closest('a').attr('href');
         if (!href || href === '#') {
           return;
@@ -173,9 +170,9 @@
         this.$modal.addClass('wdz-loading');
         this.fireCallback('beforeLoad');
         if (href.match(/\.(gif|jpg|jpeg|png)$/)) {
-          return this.loadImage(href);
+          return this.loadImage(href, e);
         } else {
-          return this.loadRemote(href);
+          return this.loadRemote(href, e);
         }
       },
       loadImage: function(href) {
@@ -231,8 +228,8 @@
         this.readDataAttributes();
         this.createModalOverlay();
         this.$modal = this.$el.is('.wdz-modal') ? this.$el : this.createModalWindow();
-        this.$modal.add(this.$el).on('open.windoze', $.proxy(this.showAll, this)).on('close.windoze', $.proxy(this.hideAll, this));
-        this.$el.on('click.wdz', this.delegate, $.proxy(this.showAll, this));
+        this.$modal.add(this.$el).off('.windoze').on('open.windoze', $.proxy(this.showAll, this)).on('close.windoze', $.proxy(this.hideAll, this));
+        this.$el.on('click.windoze', this.delegate, $.proxy(this.showAll, this));
         !this.init_shown && this.$el.trigger('close.windoze');
         return this.$el;
       }
