@@ -256,8 +256,9 @@
     tester.use('.remote_load')
     $trigger = tester.init({
       delegate: 'a'
-      afterLoad: ->
+      afterLoad: (e) ->
         start()
+        $(e.target).shouldBe('a')
         equal $.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully'
     }, $('.remote_load'))
     $trigger.find('a').click()

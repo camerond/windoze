@@ -1,6 +1,6 @@
 # jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.2.2
+# version 0.2.3
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -47,8 +47,8 @@
             when attr == 'true' then true
             when attr == 'false' then false
             else attr
-    fireCallback: (name) ->
-      @[name] && $.proxy(@[name], @)()
+    fireCallback: (name, event) ->
+      @[name] && $.proxy(@[name], @)(@current_event)
     createModalOverlay: ->
       @$overlay = $('.wdz-overlay')
       if !@$overlay.length
@@ -82,7 +82,8 @@
       @$overlay[0].offsetWidth
     showAll: (e) ->
       if @$modal.is(':visible') then return
-      if e then e.preventDefault()
+      e.preventDefault()
+      @current_event = e
       @fireCallback('beforeShow')
       $(document.body).addClass('wdz-modal-open')
       @hideOtherModals()
@@ -91,27 +92,28 @@
       @forceReflow()
       @$modal.add(@$overlay).addClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
-      @loadFromEvent(e)
+      e && @loadFromEvent(e)
     hideAll: (e) ->
       if !@$modal.is(':visible') then return
+      e.preventDefault()
+      @current_event = e
       @fireCallback('beforeClose')
       @$modal.removeClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@hideModal, @), @modal_duration else @hideModal()
       if !@keep_overlay
         @$overlay.removeClass('wdz-active')
         if @overlay_duration then setTimeout $.proxy(@hideOverlay, @), @overlay_duration else @hideOverlay()
-      e && e.preventDefault()
     hideOtherModals: ->
       $('.wdz-active').not(@$modal).not(@$overlay).each ->
         other_wdz = $(@).data('windoze')
         if other_wdz
           other_wdz.keep_overlay = other_wdz.$overlay.is(':visible')
           $(@).trigger('close.windoze')
-    showModal: ->
+    showModal: (e) ->
       @fireCallback('afterShow')
       @$modal.find(':input').eq(0).focus()
       @bindModalEvents()
-    hideModal: ->
+    hideModal: (e) ->
       @$modal.hide()
       @fireCallback('afterClose')
       @unbindModalEvents()
@@ -119,15 +121,14 @@
       @$overlay.hide()
       $(document.body).removeClass('wdz-modal-open')
     loadFromEvent: (e) ->
-      return if !e
       href = $(e.target).attr('href') || $(e.target).closest('a').attr('href')
       return if !href or href == '#'
       @$modal.addClass('wdz-loading')
       @fireCallback('beforeLoad')
       if href.match(/\.(gif|jpg|jpeg|png)$/)
-        @loadImage href
+        @loadImage href, e
       else
-        @loadRemote href
+        @loadRemote href, e
     loadImage: (href) ->
       $img = $('<img />', { src: href }).on("load", $.proxy(->
         @$modal.removeClass('wdz-loading')
@@ -162,9 +163,10 @@
       @createModalOverlay()
       @$modal = if @$el.is('.wdz-modal') then @$el else @createModalWindow()
       @$modal.add(@$el)
+        .off('.windoze')
         .on('open.windoze', $.proxy(@showAll, @))
         .on('close.windoze', $.proxy(@hideAll, @))
-      @$el.on('click.wdz', @delegate, $.proxy(@showAll, @))
+      @$el.on('click.windoze', @delegate, $.proxy(@showAll, @))
       !@init_shown && @$el.trigger('close.windoze')
       @$el
 
@@ -184,7 +186,7 @@
         $(@).data(windoze.name, plugin_instance)
         plugin_instance.init()
     else
-      $.error("Method #{method} does not exist on jQuery. #{windoze.name}");
-    return $els;
+      $.error("Method #{method} does not exist on jQuery. #{windoze.name}")
+    return $els
 
 )(jQuery)
