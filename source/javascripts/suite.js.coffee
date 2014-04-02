@@ -3,8 +3,8 @@
   # fix for finding focused elements in an inactive window
   jQuery.expr[":"].absfocus = jQuery.expr.createPseudo ->
     return (elem) ->
-      doc = elem.ownerDocument;
-      elem == doc.activeElement && !!(elem.type || elem.href);
+      doc = elem.ownerDocument
+      elem == doc.activeElement && !!(elem.type || elem.href)
 
   $.fn.selectorText = () ->
     selector = "%#{@[0].tagName.toLowerCase()}"
@@ -41,7 +41,7 @@
 
   $.fn.pressKey = (k, msg) ->
     if (msg)
-      ok(true, "I press " + msg);
+      ok(true, "I press " + msg)
     $e = $.Event('keydown')
     $e.keyCode = $e.which = k
     $(@).trigger($e)
@@ -238,7 +238,7 @@
       afterLoad: ->
         start()
         equal $.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully'
-    });
+    })
     $trigger.click()
     tester.verifyVisible()
 
@@ -247,7 +247,7 @@
     $trigger = tester.init({
       afterLoad: ->
         start()
-    });
+    })
     $trigger.click()
     equal tester.data().$modal.find('article').length, 1, 'article is appended to modal'
     equal tester.data().$modal.find('article img').length, 1, 'image is appended to article'
@@ -259,7 +259,7 @@
       afterLoad: ->
         start()
         equal $.trim(tester.data().$modal.text()), "I'm a cool remote modal!", 'modal loaded successfully'
-    }, $('.remote_load'));
+    }, $('.remote_load'))
     $trigger.find('a').click()
     tester.verifyVisible()
 
