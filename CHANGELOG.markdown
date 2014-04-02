@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.3
+
+- Pass event through to all callbacks
+- Fix bug where overlapping calls weren't turning off old events
+
 ## 0.2.2
 
 - add `open.windoze` and `close.windoze` events
