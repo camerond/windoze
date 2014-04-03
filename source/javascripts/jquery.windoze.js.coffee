@@ -37,6 +37,8 @@
       $(@).trigger('open.windoze')
     close: ->
       $(@).trigger('close.windoze')
+    destroy: ->
+      $(@).trigger('destroy.windoze')
     readDataAttributes: ->
       $el = @$el
       attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation']
@@ -149,15 +151,21 @@
         e.stopPropagation()
         @$el.trigger('close.windoze')
     bindModalEvents: ->
-      @$modal.on('click.wdz', 'a[data-wdz-close]', -> $(@).trigger('close.windoze'))
+      @$modal.on('click.windoze', 'a[data-wdz-close]', -> $(@).trigger('close.windoze'))
       if @allow_outside_click
-        @$overlay.add(@$modal).on('click.wdz', $.proxy(@outsideClickHandler, @))
-      $(document).off('keydown.wdz')
+        @$overlay.add(@$modal)
+          .on('click.windoze', $.proxy(@outsideClickHandler, @))
       if @allow_esc
-        $(document).on('keydown.wdz', $.proxy(@keydownHandler, @))
+        $(document)
+          .off('keydown.windoze')
+          .on('keydown.windoze', $.proxy(@keydownHandler, @))
     unbindModalEvents: ->
-      @$modal.add(@$overlay).off('click.wdz')
-      $(document).off('keydown.wdz')
+      @$modal.add(@$overlay).off('click.windoze')
+      $(document).off('keydown.windoze')
+    teardown: ->
+      @$modal.add(@$el).off('.windoze')
+      @$modal.remove()
+      @$el.removeData('windoze')
     init: ->
       @readDataAttributes()
       @createModalOverlay()
@@ -166,6 +174,7 @@
         .off('.windoze')
         .on('open.windoze', $.proxy(@showAll, @))
         .on('close.windoze', $.proxy(@hideAll, @))
+        .on('destroy.windoze', $.proxy(@teardown, @))
       @$el.on('click.windoze', @delegate, $.proxy(@showAll, @))
       !@init_shown && @$el.trigger('close.windoze')
       @$el
