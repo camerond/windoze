@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.4
+
+- Add `destroy.windoze` event, improve tests around events
+- Add missing -moz and prefixless transitions to default stylesheet
+
 ## 0.2.3
 
 - Pass event through to all callbacks

@@ -1,6 +1,6 @@
 # jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.2.3
+# version 0.2.4
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
