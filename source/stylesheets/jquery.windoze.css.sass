@@ -12,7 +12,9 @@ body.wdz-modal-open
   bottom: 0
   right: 0
   background: transparentize(black, .5)
+  transition: opacity .15s
   -webkit-transition: opacity .15s
+  -moz-transition: opacity .15s
   opacity: 0
   z-index: 1000
   display: none
@@ -27,7 +29,9 @@ body.wdz-modal-open
   overflow: hidden
   overflow-y: scroll
   z-index: 1001
+  transition: opacity .3s
   -webkit-transition: opacity .3s
+  -moz-transition: opacity .3s
   opacity: 0
   padding-top: 100px
   article
@@ -35,17 +39,23 @@ body.wdz-modal-open
     margin: 0 auto
   &.wdz-animate-slide-top
     padding-top: 50px
+    transition-property: padding-top, opacity
     -webkit-transition-property: padding-top, opacity
+    -moz-transition-property: padding-top, opacity
     &.wdz-active
       padding-top: 100px
   &.wdz-animate-slide-left
     left: -10%
+    transition-property: left, opacity
     -webkit-transition-property: left, opacity
+    -moz-transition-property: left, opacity
     &.wdz-active
       left: 0
   &.wdz-animate-pop-down
     opacity: 1
     top: -100%
+    transition-property: top
     -webkit-transition-property: top
+    -moz-transition-property: top
     &.wdz-active
       top: 0
