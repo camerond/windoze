@@ -149,7 +149,9 @@
         e.stopPropagation()
         @$el.trigger('close.windoze')
     bindModalEvents: ->
-      @$modal.on('click.wdz', 'a[data-wdz-close]', -> $(@).trigger('close.windoze'))
+      @$modal.on('click.wdz', 'a[data-wdz-close]', (e)->
+        e.preventDefault()
+        $(@).trigger('close.windoze'))
       if @allow_outside_click
         @$overlay.add(@$modal).on('click.wdz', $.proxy(@outsideClickHandler, @))
       $(document).off('keydown.wdz')
