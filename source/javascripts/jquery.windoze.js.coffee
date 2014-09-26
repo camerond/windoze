@@ -1,6 +1,6 @@
 # jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.2.4
+# version 0.2.4.1
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -136,7 +136,7 @@
         @$modal.removeClass('wdz-loading')
         @fireCallback('afterLoad')
       , @))
-      @$modal.append($('<article />').append($img))
+      @$modal.empty().append($('<article />').append($img))
     loadRemote: (href) ->
       @$modal.load href, $.proxy(->
         @$modal.removeClass('wdz-loading')
