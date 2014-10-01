@@ -33,6 +33,7 @@
     relocate_modal: true
     allow_outside_click: true
     allow_esc: true
+    lightbox: false
     open: ->
       $(@).trigger('open.windoze')
     close: ->
@@ -41,7 +42,7 @@
       $(@).trigger('destroy.windoze')
     readDataAttributes: ->
       $el = @$el
-      attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation']
+      attrs = ['container', 'delegate', 'init_shown', 'lightbox', 'relocate_modal', 'animation']
       detected_attrs = attrs.map((a) -> $el.attr("data-wdz-#{a}"))
       for attr, i in detected_attrs
         if attr
@@ -127,7 +128,7 @@
       return if !href or href == '#'
       @$modal.addClass('wdz-loading')
       @fireCallback('beforeLoad')
-      if href.match(/\.(gif|jpg|jpeg|png)$/)
+      if href.match(/\.(gif|jpg|jpeg|png)$/) || @lightbox
         @loadImage href, e
       else
         @loadRemote href, e
