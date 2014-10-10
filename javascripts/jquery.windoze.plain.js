@@ -1,6 +1,6 @@
 // jQuery Windoze Plugin
 // http://github.com/camerond/windoze
-// version 0.2.3
+// version 0.2.5
 // Generated from Coffeescript source
 //
 // Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
@@ -36,17 +36,21 @@
       relocate_modal: true,
       allow_outside_click: true,
       allow_esc: true,
+      lightbox: false,
       open: function() {
         return $(this).trigger('open.windoze');
       },
       close: function() {
         return $(this).trigger('close.windoze');
       },
+      destroy: function() {
+        return $(this).trigger('destroy.windoze');
+      },
       readDataAttributes: function() {
         var $el, attr, attrs, detected_attrs, i, _i, _len, _results;
 
         $el = this.$el;
-        attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation'];
+        attrs = ['container', 'delegate', 'init_shown', 'lightbox', 'relocate_modal', 'animation'];
         detected_attrs = attrs.map(function(a) {
           return $el.attr("data-wdz-" + a);
         });
@@ -195,7 +199,7 @@
         }
         this.$modal.addClass('wdz-loading');
         this.fireCallback('beforeLoad');
-        if (href.match(/\.(gif|jpg|jpeg|png)$/)) {
+        if (href.match(/\.(gif|jpg|jpeg|png)$/) || this.lightbox) {
           return this.loadImage(href, e);
         } else {
           return this.loadRemote(href, e);
@@ -210,7 +214,7 @@
           this.$modal.removeClass('wdz-loading');
           return this.fireCallback('afterLoad');
         }, this));
-        return this.$modal.append($('<article />').append($img));
+        return this.$modal.empty().append($('<article />').append($img));
       },
       loadRemote: function(href) {
         return this.$modal.load(href, $.proxy(function() {
@@ -235,26 +239,30 @@
         }
       },
       bindModalEvents: function() {
-        this.$modal.on('click.wdz', 'a[data-wdz-close]', function() {
+        this.$modal.on('click.windoze', 'a[data-wdz-close]', function() {
           return $(this).trigger('close.windoze');
         });
         if (this.allow_outside_click) {
-          this.$overlay.add(this.$modal).on('click.wdz', $.proxy(this.outsideClickHandler, this));
+          this.$overlay.add(this.$modal).on('click.windoze', $.proxy(this.outsideClickHandler, this));
         }
-        $(document).off('keydown.wdz');
         if (this.allow_esc) {
-          return $(document).on('keydown.wdz', $.proxy(this.keydownHandler, this));
+          return $(document).off('keydown.windoze').on('keydown.windoze', $.proxy(this.keydownHandler, this));
         }
       },
       unbindModalEvents: function() {
-        this.$modal.add(this.$overlay).off('click.wdz');
-        return $(document).off('keydown.wdz');
+        this.$modal.add(this.$overlay).off('click.windoze');
+        return $(document).off('keydown.windoze');
+      },
+      teardown: function() {
+        this.$modal.add(this.$el).off('.windoze');
+        this.$modal.remove();
+        return this.$el.removeData('windoze');
       },
       init: function() {
         this.readDataAttributes();
         this.createModalOverlay();
         this.$modal = this.$el.is('.wdz-modal') ? this.$el : this.createModalWindow();
-        this.$modal.add(this.$el).off('.windoze').on('open.windoze', $.proxy(this.showAll, this)).on('close.windoze', $.proxy(this.hideAll, this));
+        this.$modal.add(this.$el).off('.windoze').on('open.windoze', $.proxy(this.showAll, this)).on('close.windoze', $.proxy(this.hideAll, this)).on('destroy.windoze', $.proxy(this.teardown, this));
         this.$el.on('click.windoze', this.delegate, $.proxy(this.showAll, this));
         !this.init_shown && this.$el.trigger('close.windoze');
         return this.$el;

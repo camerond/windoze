@@ -337,6 +337,22 @@
       tester.$trigger.windoze('open');
       return tester.verifyVisible();
     });
+    module('Events & Methods');
+    test('show via open.windoze and close.windoze events on element & modal', function() {
+      tester.init();
+      tester.data().$el.trigger('open.windoze');
+      tester.verifyVisible();
+      tester.data().$modal.trigger('close.windoze');
+      return tester.verifyHidden();
+    });
+    test('destroy', function() {
+      var $el;
+
+      $el = tester.init();
+      $el.windoze('destroy');
+      equal($('.wdz-modal').length, 0, 'modal destroyed');
+      return ok(!$el.data('windoze'), 'data removed from element');
+    });
     module('Options');
     test('show when initialized', function() {
       tester.init({
