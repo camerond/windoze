@@ -80,6 +80,12 @@ $foo.windoze({
   // load the page with this modal shown
   init_shown: false,
 
+  // expect image data as response to the AJAX call, and lightbox it.
+  // this is set automatically if the URL ends in an image extension,
+  // but in certain cases (e.g. linking to a Filepicker response)
+  // it needs to be set manually
+  lightbox: false,
+
   // before/after modal animates open
   beforeShow: $.noop,
   afterShow: $.noop,

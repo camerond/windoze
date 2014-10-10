@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.5
+
+- allow lightboxing to be set manually via option or data attribute
+- fix a bug when lightboxing an element would create multiple new elements
+
 ## 0.2.4
 
 - Add `destroy.windoze` event, improve tests around events

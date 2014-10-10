@@ -1,6 +1,6 @@
 // jQuery Windoze Plugin
 // http://github.com/camerond/windoze
-// version 0.2.4
+// version 0.2.5
 // Generated from Coffeescript source
 //
 // Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
@@ -36,6 +36,7 @@
       relocate_modal: true,
       allow_outside_click: true,
       allow_esc: true,
+      lightbox: false,
       open: function() {
         return $(this).trigger('open.windoze');
       },
@@ -49,7 +50,7 @@
         var $el, attr, attrs, detected_attrs, i, _i, _len, _results;
 
         $el = this.$el;
-        attrs = ['container', 'delegate', 'init_shown', 'relocate_modal', 'animation'];
+        attrs = ['container', 'delegate', 'init_shown', 'lightbox', 'relocate_modal', 'animation'];
         detected_attrs = attrs.map(function(a) {
           return $el.attr("data-wdz-" + a);
         });
@@ -198,7 +199,7 @@
         }
         this.$modal.addClass('wdz-loading');
         this.fireCallback('beforeLoad');
-        if (href.match(/\.(gif|jpg|jpeg|png)$/)) {
+        if (href.match(/\.(gif|jpg|jpeg|png)$/) || this.lightbox) {
           return this.loadImage(href, e);
         } else {
           return this.loadRemote(href, e);
@@ -213,7 +214,7 @@
           this.$modal.removeClass('wdz-loading');
           return this.fireCallback('afterLoad');
         }, this));
-        return this.$modal.append($('<article />').append($img));
+        return this.$modal.empty().append($('<article />').append($img));
       },
       loadRemote: function(href) {
         return this.$modal.load(href, $.proxy(function() {
