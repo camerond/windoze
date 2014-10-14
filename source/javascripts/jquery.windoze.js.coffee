@@ -1,6 +1,6 @@
 # jQuery Windoze Plugin
 # http://github.com/camerond/windoze
-# version 0.2.5
+# version 0.2.6
 #
 # Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
 #
@@ -34,6 +34,7 @@
     allow_outside_click: true
     allow_esc: true
     lightbox: false
+    focus_on_show: true
     open: ->
       $(@).trigger('open.windoze')
     close: ->
@@ -114,7 +115,7 @@
           $(@).trigger('close.windoze')
     showModal: (e) ->
       @fireCallback('afterShow')
-      @$modal.find(':input').eq(0).focus()
+      @focus_on_show && @$modal.find(':input').eq(0).focus()
       @bindModalEvents()
     hideModal: (e) ->
       @$modal.hide()

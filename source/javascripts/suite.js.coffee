@@ -336,6 +336,18 @@
     tester.data('windoze').$modal.shouldSay($('#relocate_me').text())
     $('#relocate_me').parent().shouldBe('.relocate_modal')
 
+  test 'disable focus input on show', ->
+    $trigger = tester.init({
+      focus_on_show: false
+    })
+    $trigger.click()
+    tester.data().$modal.find('input').shouldBe(':absfocus')
+    tester.data().$overlay.click()
+    tester.data().$modal.prepend($('<textarea />'))
+    $trigger.click()
+    tester.data().$modal.find('textarea').shouldNotBe(':absfocus')
+    tester.data().$modal.text('foobar')
+
   test 'data attribute support', ->
     $('.link_trigger a')
       .attr('data-wdz-delegate', 'a.bar')

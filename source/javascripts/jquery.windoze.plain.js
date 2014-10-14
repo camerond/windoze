@@ -1,6 +1,6 @@
 // jQuery Windoze Plugin
 // http://github.com/camerond/windoze
-// version 0.2.5
+// version 0.2.6
 // Generated from Coffeescript source
 //
 // Copyright (c) 2014 Cameron Daigle, http://camerondaigle.com
@@ -37,6 +37,7 @@
       allow_outside_click: true,
       allow_esc: true,
       lightbox: false,
+      focus_on_show: true,
       open: function() {
         return $(this).trigger('open.windoze');
       },
@@ -178,7 +179,7 @@
       },
       showModal: function(e) {
         this.fireCallback('afterShow');
-        this.$modal.find(':input').eq(0).focus();
+        this.focus_on_show && this.$modal.find(':input').eq(0).focus();
         return this.bindModalEvents();
       },
       hideModal: function(e) {

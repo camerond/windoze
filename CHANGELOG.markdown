@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.6
+
+- option to disable automatic focusing on first input when modal is shown
+
 ## 0.2.5
 
 - allow lightboxing to be set manually via option or data attribute
