@@ -40,6 +40,9 @@ $foo.windoze({
   // it needs to be set manually
   lightbox: false,
 
+  // automatically focus the first input in the modal
+  focus_on_show: true,
+
   // before/after modal animates open
   beforeShow: $.noop,
   afterShow: $.noop,

@@ -51,7 +51,7 @@
         var $el, attr, attrs, detected_attrs, i, _i, _len, _results;
 
         $el = this.$el;
-        attrs = ['container', 'delegate', 'init_shown', 'lightbox', 'relocate_modal', 'animation'];
+        attrs = ['container', 'delegate', 'focus_on_show', 'init_shown', 'lightbox', 'relocate_modal', 'animation'];
         detected_attrs = attrs.map(function(a) {
           return $el.attr("data-wdz-" + a);
         });

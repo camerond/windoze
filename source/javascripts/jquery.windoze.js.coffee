@@ -43,7 +43,7 @@
       $(@).trigger('destroy.windoze')
     readDataAttributes: ->
       $el = @$el
-      attrs = ['container', 'delegate', 'init_shown', 'lightbox', 'relocate_modal', 'animation']
+      attrs = ['container', 'delegate', 'focus_on_show', 'init_shown', 'lightbox', 'relocate_modal', 'animation']
       detected_attrs = attrs.map((a) -> $el.attr("data-wdz-#{a}"))
       for attr, i in detected_attrs
         if attr
