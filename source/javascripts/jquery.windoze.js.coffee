@@ -44,7 +44,8 @@
     readDataAttributes: ->
       $el = @$el
       attrs = ['container', 'delegate', 'focus_on_show', 'init_shown', 'lightbox', 'relocate_modal', 'animation']
-      detected_attrs = attrs.map((a) -> $el.attr("data-wdz-#{a}"))
+      detected_attrs = []
+      detected_attrs.push $el.attr("data-wdz-#{a}") for a in attrs
       for attr, i in detected_attrs
         if attr
           @[attrs[i]] = switch
@@ -77,7 +78,9 @@
       if @animation
         @$modal.addClass("wdz-animate-#{@animation}")
     detectTransitionDuration: ($el) ->
-      duration = +$el.css('transition-duration').split(' ')[0].replace(/([^0-9\.]+)/, '')
+      d = $el.css('transition-duration')
+      if d
+        duration = +d.split(' ')[0].replace(/([^0-9\.]+)/, '')
       if duration then duration * 1000 else false
     generateID: ->
       "wdz-#{('' + Math.random()).slice(2, 6)}"
