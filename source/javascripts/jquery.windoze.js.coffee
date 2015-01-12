@@ -116,6 +116,7 @@
         if other_wdz
           other_wdz.keep_overlay = other_wdz.$overlay.is(':visible')
           $(@).trigger('close.windoze')
+          other_wdz.keep_overlay = false
     showModal: (e) ->
       @fireCallback('afterShow')
       @focus_on_show && @$modal.find(':input').eq(0).focus()
