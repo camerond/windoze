@@ -180,7 +180,8 @@
         .on('open.windoze', $.proxy(@showAll, @))
         .on('close.windoze', $.proxy(@hideAll, @))
         .on('destroy.windoze', $.proxy(@teardown, @))
-      @$el.on('click.windoze', @delegate, $.proxy(@showAll, @))
+      if !@$el.is('.wdz-modal')
+        @$el.on('click.windoze', @delegate, $.proxy(@showAll, @))
       !@init_shown && @$el.trigger('close.windoze')
       @$el
 
