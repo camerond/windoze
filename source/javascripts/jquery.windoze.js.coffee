@@ -100,6 +100,7 @@
       @$modal.add(@$overlay).addClass('wdz-active')
       if @modal_duration then setTimeout $.proxy(@showModal, @), @modal_duration else @showModal()
       e && @loadFromEvent(e)
+      false
     hideAll: (e) ->
       if !@$modal.is(':visible') then return
       e.preventDefault()
@@ -110,6 +111,7 @@
       if !@keep_overlay
         @$overlay.removeClass('wdz-active')
         if @overlay_duration then setTimeout $.proxy(@hideOverlay, @), @overlay_duration else @hideOverlay()
+      false
     hideOtherModals: ->
       $('.wdz-active').not(@$modal).not(@$overlay).each ->
         other_wdz = $(@).data('windoze')
