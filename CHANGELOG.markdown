@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.7
+
+- rebind `windoze` instance to modal element on open (so shared modals bind properly to their respective triggers)
+
 ## 0.2.6
 
 - option to disable automatic focusing on first input when modal is shown

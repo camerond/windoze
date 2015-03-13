@@ -64,6 +64,7 @@ windoze =
     if @$modal.is(':visible') then return
     e.preventDefault()
     @current_event = e
+    @$modal.data('windoze', @$el.data('windoze'))
     @fireCallback('beforeShow')
     $(document.body).addClass('wdz-modal-open')
     @hideOtherModals()
@@ -172,6 +173,7 @@ $.fn[windoze.name] = (opts) ->
         true,
         $el: $(@),
         windoze,
+        $(@).data('windoze'),
         opts
       )
       $(@).data(windoze.name, plugin_instance)
