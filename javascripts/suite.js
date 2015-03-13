@@ -384,6 +384,20 @@
       tester.data('windoze').$modal.shouldSay($('#relocate_me').text());
       return $('#relocate_me').parent().shouldBe('.relocate_modal');
     });
+    test('disable focus input on show', function() {
+      var $trigger;
+
+      $trigger = tester.init({
+        focus_on_show: false
+      });
+      $trigger.click();
+      tester.data().$modal.find('input').shouldBe(':absfocus');
+      tester.data().$overlay.click();
+      tester.data().$modal.prepend($('<textarea />'));
+      $trigger.click();
+      tester.data().$modal.find('textarea').shouldNotBe(':absfocus');
+      return tester.data().$modal.text('foobar');
+    });
     return test('data attribute support', function() {
       var wdz;
 
