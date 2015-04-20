@@ -209,12 +209,13 @@
   module 'Form Elements',
     setup: ->
       tester.createElements()
+      $('.wdz-modal').append($('<input />').attr('type', 'hidden'))
       $('.wdz-modal').append($('<input />').attr('type', 'text'))
 
   test 'the first input/textarea should be focused when modal is shown', ->
     $trigger = tester.init()
     $trigger.click()
-    tester.data().$modal.find('input').shouldBe(':absfocus')
+    tester.data().$modal.find(':text').shouldBe(':absfocus')
     tester.data().$overlay.click()
     tester.data().$modal.prepend($('<textarea />'))
     $trigger.click()

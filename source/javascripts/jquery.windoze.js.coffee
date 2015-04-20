@@ -95,7 +95,7 @@ windoze =
         other_wdz.keep_overlay = false
   showModal: (e) ->
     @fireCallback('afterShow')
-    @focus_on_show && @$modal.find(':input').eq(0).focus()
+    @focus_on_show && @$modal.find(':input').not(':hidden').eq(0).focus()
     @bindModalEvents()
   hideModal: (e) ->
     @$modal.hide()
